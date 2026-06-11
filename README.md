@@ -1,6 +1,7 @@
 # Prop-5
 
 Prop-5 は、JUCE フレームワークを使用して開発されたシンセサイザー・オーディオプラグイン（VST3 / Standalone 形式）です。
+※現在、ベータテスト中です
 
 ## 前提条件 (Prerequisites)
 
