@@ -30,7 +30,7 @@ This repository does not include the JUCE framework source code itself (it is ex
 First, clone this repository.
 
 ```bash
-git clone <Repository URL> Prop-5
+git clone https://github.com/yamatech/Prop-5 Prop-5
 cd Prop-5
 ```
 
