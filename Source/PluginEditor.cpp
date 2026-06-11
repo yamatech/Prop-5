@@ -7,8 +7,8 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 {
     setLookAndFeel (&lookAndFeel);
 
-    // Set window size to 1200 x 500 for Prophet-5 Grid layout
-    setSize (1200, 500);
+    // Set window size to 1380 x 575 (1.15x of 1200x500) for Prophet-5 Grid layout
+    setSize (1380, 575);
 
     // Helpers to setup common components
     auto setupSlider = [this] (juce::Slider& slider, juce::Label& label, const juce::String& name)
@@ -377,6 +377,9 @@ Prop5Editor::~Prop5Editor()
 //==============================================================================
 void Prop5Editor::paint (juce::Graphics& g)
 {
+    float scale = getWidth() / 1200.0f;
+    g.addTransform (juce::AffineTransform::scale (scale));
+
     // 1. 全体背景（フラットなダークグレー/ブラック）
     g.fillAll (juce::Colour (0xff0f0f11));
 
@@ -462,8 +465,8 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setColour (titleWhite.withAlpha (0.7f));
     g.drawText ("VELOCITY", globalArea.getX() + 12, globalArea.getY() + 175, globalArea.getWidth() - 24, 15, juce::Justification::left);
 
-    // PRESET BAR
-    drawSection (juce::Rectangle<int> (15, 445, 1170, 45), "", titleWhite);
+    // PRESET BAR (白線の枠なしでスッキリさせるため、描画を省略)
+    // drawSection (juce::Rectangle<int> (15, 445, 1170, 45), "", titleWhite);
 
     // --- プラグインロゴ・エンブレム描画 ---
     // プリセットバーの左側の空きスペース（x = 30付近）に、実機風のオレンジ/レッドの太字イタリックロゴを描画
@@ -487,110 +490,117 @@ void Prop5Editor::paint (juce::Graphics& g)
 
 void Prop5Editor::resized()
 {
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (int val) -> int { return juce::roundToInt (val * scale); };
+    auto sRect = [s] (int x, int y, int w, int h) -> juce::Rectangle<int>
+    {
+        return { s(x), s(y), s(w), s(h) };
+    };
+
     // --- PRESET BAR Placement ---
     int prY = 445;
-    presetLabel.setBounds (180, prY + 10, 70, 25);
-    prevPresetButton.setBounds (250, prY + 10, 30, 25);
-    presetCombo.setBounds (290, prY + 10, 220, 25);
-    nextPresetButton.setBounds (520, prY + 10, 30, 25);
-    initButton.setBounds (570, prY + 10, 50, 25);
-    saveButton.setBounds (630, prY + 10, 60, 25);
-    loadButton.setBounds (700, prY + 10, 60, 25);
-    setFolderButton.setBounds (770, prY + 10, 100, 25);
+    presetLabel.setBounds (sRect (180, prY + 10, 70, 25));
+    prevPresetButton.setBounds (sRect (250, prY + 10, 30, 25));
+    presetCombo.setBounds (sRect (290, prY + 10, 220, 25));
+    nextPresetButton.setBounds (sRect (520, prY + 10, 30, 25));
+    initButton.setBounds (sRect (570, prY + 10, 50, 25));
+    saveButton.setBounds (sRect (630, prY + 10, 60, 25));
+    loadButton.setBounds (sRect (700, prY + 10, 60, 25));
+    setFolderButton.setBounds (sRect (770, prY + 10, 100, 25));
 
     // --- WHEELS Placement ---
-    pitchBendSlider.setBounds (25, 60, 25, 360);
-    modWheelSlider.setBounds (55, 60, 25, 360);
-    pitchBendLabel.setBounds (15, 35, 45, 20);
-    modWheelLabel.setBounds (50, 35, 45, 20);
+    pitchBendSlider.setBounds (sRect (25, 60, 25, 360));
+    modWheelSlider.setBounds (sRect (55, 60, 25, 360));
+    pitchBendLabel.setBounds (sRect (15, 35, 45, 20));
+    modWheelLabel.setBounds (sRect (50, 35, 45, 20));
 
     // --- POLY MOD Placement ---
     int pmX = 100, pmY = 15;
-    polyModEnvAmtSlider.setBounds (pmX + 25, pmY + 42, 55, 55);
-    polyModOscBAmtSlider.setBounds (pmX + 95, pmY + 42, 55, 55);
-    polyModDestFreqAButton.setBounds (pmX + 20, pmY + 102, 70, 25);
-    polyModDestPwAButton.setBounds (pmX + 97, pmY + 102, 70, 25);
-    polyModDestVcfButton.setBounds (pmX + 174, pmY + 102, 70, 25);
+    polyModEnvAmtSlider.setBounds (sRect (pmX + 25, pmY + 42, 55, 55));
+    polyModOscBAmtSlider.setBounds (sRect (pmX + 95, pmY + 42, 55, 55));
+    polyModDestFreqAButton.setBounds (sRect (pmX + 20, pmY + 102, 70, 25));
+    polyModDestPwAButton.setBounds (sRect (pmX + 97, pmY + 102, 70, 25));
+    polyModDestVcfButton.setBounds (sRect (pmX + 174, pmY + 102, 70, 25));
 
     // --- LFO Placement ---
     int lfoX = 100, lfoY = 155;
-    lfoRateSlider.setBounds (lfoX + 15, lfoY + 45, 55, 55);
-    lfoInitialAmountSlider.setBounds (lfoX + 85, lfoY + 45, 55, 55);
-    lfoShapeLabel.setBounds (lfoX + 150, lfoY + 22, 100, 15);
-    lfoTriButton.setBounds (lfoX + 150, lfoY + 42, 32, 45);
-    lfoSquButton.setBounds (lfoX + 185, lfoY + 42, 32, 45);
-    lfoSawButton.setBounds (lfoX + 220, lfoY + 42, 32, 45);
+    lfoRateSlider.setBounds (sRect (lfoX + 15, lfoY + 45, 55, 55));
+    lfoInitialAmountSlider.setBounds (sRect (lfoX + 85, lfoY + 45, 55, 55));
+    lfoShapeLabel.setBounds (sRect (lfoX + 150, lfoY + 22, 100, 15));
+    lfoTriButton.setBounds (sRect (lfoX + 150, lfoY + 42, 32, 45));
+    lfoSquButton.setBounds (sRect (lfoX + 185, lfoY + 42, 32, 45));
+    lfoSawButton.setBounds (sRect (lfoX + 220, lfoY + 42, 32, 45));
 
     // --- WHEEL-MOD Placement ---
     int wmX = 100, wmY = 295;
-    wheelModSourceMixSlider.setBounds (wmX + 15, wmY + 55, 55, 55);
-    wheelModDestFreqAButton.setBounds (wmX + 85, wmY + 40, 80, 25);
-    wheelModDestFreqBButton.setBounds (wmX + 170, wmY + 40, 80, 25);
-    wheelModDestPwAButton.setBounds (wmX + 85, wmY + 80, 50, 25);
-    wheelModDestPwBButton.setBounds (wmX + 140, wmY + 80, 50, 25);
-    wheelModDestFilterButton.setBounds (wmX + 195, wmY + 80, 60, 25);
+    wheelModSourceMixSlider.setBounds (sRect (wmX + 15, wmY + 55, 55, 55));
+    wheelModDestFreqAButton.setBounds (sRect (wmX + 85, wmY + 40, 80, 25));
+    wheelModDestFreqBButton.setBounds (sRect (wmX + 170, wmY + 40, 80, 25));
+    wheelModDestPwAButton.setBounds (sRect (wmX + 85, wmY + 80, 50, 25));
+    wheelModDestPwBButton.setBounds (sRect (wmX + 140, wmY + 80, 50, 25));
+    wheelModDestFilterButton.setBounds (sRect (wmX + 195, wmY + 80, 60, 25));
 
     // --- OSC A Placement ---
     int oscAX = 375, oscAY = 15;
     // 上段：左列に Sync ボタンを配置し、中列・右列に Freq A と Pw A ノブを配置
-    oscSyncButton.setBounds (oscAX + 20, oscAY + 68, 60, 40);
-    oscAFreqSlider.setBounds (oscAX + 95, oscAY + 55, 65, 65);
-    oscAPwSlider.setBounds (oscAX + 175, oscAY + 55, 65, 65);
+    oscSyncButton.setBounds (sRect (oscAX + 20, oscAY + 68, 60, 40));
+    oscAFreqSlider.setBounds (sRect (oscAX + 95, oscAY + 55, 65, 65));
+    oscAPwSlider.setBounds (sRect (oscAX + 175, oscAY + 55, 65, 65));
     // 下段：中列・右列に波形選択ボタン（Saw, Square）を配置（Sync との混同を防ぐ）
-    oscASawButton.setBounds (oscAX + 97, oscAY + 138, 60, 40);
-    oscASqrButton.setBounds (oscAX + 177, oscAY + 138, 60, 40);
+    oscASawButton.setBounds (sRect (oscAX + 97, oscAY + 138, 60, 40));
+    oscASqrButton.setBounds (sRect (oscAX + 177, oscAY + 138, 60, 40));
 
     // --- OSC B Placement ---
     int oscBX = 375, oscBY = 225;
-    oscBFreqSlider.setBounds (oscBX + 20, oscBY + 50, 60, 60);
-    oscBFineSlider.setBounds (oscBX + 90, oscBY + 50, 60, 60);
-    oscBPwSlider.setBounds (oscBX + 160, oscBY + 50, 60, 60);
-    oscBSawButton.setBounds (oscBX + 20, oscBY + 122, 60, 40);
-    oscBSqrButton.setBounds (oscBX + 90, oscBY + 122, 60, 40);
-    oscBTriButton.setBounds (oscBX + 160, oscBY + 122, 60, 40);
-    oscBLoModeButton.setBounds (oscBX + 70, oscBY + 172, 125, 30);
+    oscBFreqSlider.setBounds (sRect (oscBX + 20, oscBY + 50, 60, 60));
+    oscBFineSlider.setBounds (sRect (oscBX + 90, oscBY + 50, 60, 60));
+    oscBPwSlider.setBounds (sRect (oscBX + 160, oscBY + 50, 60, 60));
+    oscBSawButton.setBounds (sRect (oscBX + 20, oscBY + 122, 60, 40));
+    oscBSqrButton.setBounds (sRect (oscBX + 90, oscBY + 122, 60, 40));
+    oscBTriButton.setBounds (sRect (oscBX + 160, oscBY + 122, 60, 40));
+    oscBLoModeButton.setBounds (sRect (oscBX + 70, oscBY + 172, 125, 30));
 
     // --- OSC MIX Placement ---
     int mixX = 650, mixY = 15;
-    mixOscASlider.setBounds (mixX + 25, mixY + 42, 55, 55);
-    mixOscBSlider.setBounds (mixX + 95, mixY + 42, 55, 55);
-    mixNoiseSlider.setBounds (mixX + 165, mixY + 42, 55, 55);
+    mixOscASlider.setBounds (sRect (mixX + 25, mixY + 42, 55, 55));
+    mixOscBSlider.setBounds (sRect (mixX + 95, mixY + 42, 55, 55));
+    mixNoiseSlider.setBounds (sRect (mixX + 165, mixY + 42, 55, 55));
 
     // --- FILTER Placement ---
     int vcfX = 650, vcfY = 135;
-    cutoffSlider.setBounds (vcfX + 25, vcfY + 45, 60, 60);
-    resonanceSlider.setBounds (vcfX + 95, vcfY + 45, 60, 60);
-    vcfEnvAmtSlider.setBounds (vcfX + 165, vcfY + 45, 60, 60);
+    cutoffSlider.setBounds (sRect (vcfX + 25, vcfY + 45, 60, 60));
+    resonanceSlider.setBounds (sRect (vcfX + 95, vcfY + 45, 60, 60));
+    vcfEnvAmtSlider.setBounds (sRect (vcfX + 165, vcfY + 45, 60, 60));
 
-    envAAtkSlider.setBounds (vcfX + 15, vcfY + 145, 50, 50);
-    envADcySlider.setBounds (vcfX + 75, vcfY + 145, 50, 50);
-    envASusSlider.setBounds (vcfX + 135, vcfY + 145, 50, 50);
-    envARelSlider.setBounds (vcfX + 195, vcfY + 145, 50, 50);
+    envAAtkSlider.setBounds (sRect (vcfX + 15, vcfY + 145, 50, 50));
+    envADcySlider.setBounds (sRect (vcfX + 75, vcfY + 145, 50, 50));
+    envASusSlider.setBounds (sRect (vcfX + 135, vcfY + 145, 50, 50));
+    envARelSlider.setBounds (sRect (vcfX + 195, vcfY + 145, 50, 50));
 
-    vcfKbTrackLabel.setBounds (vcfX + 10, vcfY + 210, 245, 15);
-    kbTrackOffButton.setBounds (vcfX + 25, vcfY + 228, 60, 35);
-    kbTrackHalfButton.setBounds (vcfX + 95, vcfY + 228, 60, 35);
-    kbTrackFullButton.setBounds (vcfX + 165, vcfY + 228, 60, 35);
+    vcfKbTrackLabel.setBounds (sRect (vcfX + 10, vcfY + 210, 245, 15));
+    kbTrackOffButton.setBounds (sRect (vcfX + 25, vcfY + 228, 60, 35));
+    kbTrackHalfButton.setBounds (sRect (vcfX + 95, vcfY + 228, 60, 35));
+    kbTrackFullButton.setBounds (sRect (vcfX + 165, vcfY + 228, 60, 35));
 
     // --- VCA ENV Placement ---
     int vcaX = 925, vcaY = 15;
-    envBAtkSlider.setBounds (vcaX + 15, vcaY + 45, 50, 50);
-    envBDcySlider.setBounds (vcaX + 75, vcaY + 45, 50, 50);
-    envBSusSlider.setBounds (vcaX + 135, vcaY + 45, 50, 50);
-    envBRelSlider.setBounds (vcaX + 195, vcaY + 45, 50, 50);
+    envBAtkSlider.setBounds (sRect (vcaX + 15, vcaY + 45, 50, 50));
+    envBDcySlider.setBounds (sRect (vcaX + 75, vcaY + 45, 50, 50));
+    envBSusSlider.setBounds (sRect (vcaX + 135, vcaY + 45, 50, 50));
+    envBRelSlider.setBounds (sRect (vcaX + 195, vcaY + 45, 50, 50));
 
     // --- GLOBAL Placement ---
     int glX = 925, glY = 155;
-    glideSlider.setBounds (glX + 15, glY + 45, 50, 50);
-    masterTuneSlider.setBounds (glX + 75, glY + 45, 50, 50);
-    pbRangeSlider.setBounds (glX + 135, glY + 45, 50, 50);
-    masterVolumeSlider.setBounds (glX + 195, glY + 45, 50, 50);
+    glideSlider.setBounds (sRect (glX + 15, glY + 45, 50, 50));
+    masterTuneSlider.setBounds (sRect (glX + 75, glY + 45, 50, 50));
+    pbRangeSlider.setBounds (sRect (glX + 135, glY + 45, 50, 50));
+    masterVolumeSlider.setBounds (sRect (glX + 195, glY + 45, 50, 50));
 
-    unisonButton.setBounds (glX + 45, glY + 112, 75, 40);
-    holdButton.setBounds (glX + 135, glY + 112, 75, 40);
+    unisonButton.setBounds (sRect (glX + 45, glY + 112, 75, 40));
+    holdButton.setBounds (sRect (glX + 135, glY + 112, 75, 40));
 
-    velocityToFilterButton.setBounds (glX + 45, glY + 202, 75, 40);
-    velocityToAmpButton.setBounds (glX + 135, glY + 202, 75, 40);
+    velocityToFilterButton.setBounds (sRect (glX + 45, glY + 202, 75, 40));
+    velocityToAmpButton.setBounds (sRect (glX + 135, glY + 202, 75, 40));
 }
 
 void Prop5Editor::timerCallback()
