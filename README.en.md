@@ -84,3 +84,15 @@ Upon a successful build, the plugin files for each format will be generated in t
   - Generated inside `build/Prop-5_artefacts/Release/` (or `Debug/`).
 
 On Windows, if you want to automatically copy the plug-in to a specific folder (e.g., `C:\Program Files\Common Files\VST3`) after building, change `COPY_PLUGIN_AFTER_BUILD` to `TRUE` in [CMakeLists.txt](file:///W:/vsti-projects/Prop-5/CMakeLists.txt).
+
+---
+
+## License
+
+This project is licensed under the **GNU General Public License v3 (GPLv3)**. See the [LICENSE](file:///W:/vsti-projects/Prop-5/LICENSE) file for details.  
+This project uses the JUCE framework under the terms of the JUCE GPLv3 license.
+
+## Disclaimer & Trademarks
+
+- **Prophet-5** and **Sequential** are registered trademarks of **Sequential LLC**.
+- This software is an unofficial, independent fan-made clone/emulator and is **not affiliated with, endorsed by, sponsored by, or associated with Sequential LLC or its affiliates in any way.**

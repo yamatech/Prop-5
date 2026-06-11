@@ -84,3 +84,21 @@ cmake --build . --config Release
   - `build/Prop-5_artefacts/Release/` (または `Debug/`) 内に生成されます。
 
 Windows 環境で、ビルド後に特定のフォルダ（例: `C:\Program Files\Common Files\VST3`）へ自動コピーしたい場合は、[CMakeLists.txt](file:///W:/vsti-projects/Prop-5/CMakeLists.txt) 内の `COPY_PLUGIN_AFTER_BUILD` を `TRUE` に変更してください。
+
+---
+
+## ライセンス (License)
+
+本プロジェクトは **GNU General Public License v3 (GPLv3)** のもとで公開されています。詳細については [LICENSE](file:///W:/vsti-projects/Prop-5/LICENSE) ファイルを参照してください。  
+本プロジェクトは JUCE フレームワークを使用しており、JUCE の GPLv3 ライセンス条項に従っています。
+
+This project is licensed under the **GNU General Public License v3 (GPLv3)**. See the [LICENSE](file:///W:/vsti-projects/Prop-5/LICENSE) file for details.  
+This project uses the JUCE framework under the terms of the JUCE GPLv3 license.
+
+## 免責事項・商標について (Disclaimer & Trademarks)
+
+- **Prophet-5** および **Sequential** は **Sequential LLC** の登録商標です。
+- 本ソフトウェアは個人が開発した非公式のクローン（トリビュート・エミュレータ）であり、**Sequential LLC およびその関連会社とは一切関係がなく、公認、推奨、または支援を受けたものではありません。**
+
+- **Prophet-5** and **Sequential** are registered trademarks of **Sequential LLC**.
+- This software is an unofficial, independent fan-made clone/emulator and is **not affiliated with, endorsed by, sponsored by, or associated with Sequential LLC or its affiliates in any way.**
