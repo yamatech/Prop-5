@@ -1,0 +1,86 @@
+.gitignore for Prop-5 project
+# Prop-5プロジェクト向けの推奨 .gitignore
+
+# --- Build artifacts ---
+/build/
+/Prop-5_artefacts/
+/x64/
+
+# CMake
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/install_manifest.txt
+/compile_commands.json
+/Makefile
+
+# Visual Studio / MSBuild
+/.vs/
+*.vcxproj*
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+*.exe
+*.dll
+*.lib
+*.a
+*.so
+*.dylib
+*.obj
+*.o
+*.out
+*.pdb
+*.ilk
+*.idb
+*.exp
+
+# Temporary / intermediate
+*.tmp
+*.temp
+*.log
+*~
+~$*
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+/.vscode/
+/.idea/
+*.sublime-project
+*.sublime-workspace
+
+# JUCE / Projucer and generated IDE folders
+**/Builds/
+*.jucer.user
+
+# Language / env
+venv/
+env/
+.env
+node_modules/
+
+# Archives
+*.zip
+*.tar.gz
+*.7z
+
+# Backup / swap
+*.bak
+*.swp
+
+# other
+.private_docs/
+
+# JUCE framework
+/JUCE/
