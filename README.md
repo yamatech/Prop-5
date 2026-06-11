@@ -1,5 +1,7 @@
 # Prop-5
 
+The English version of the README is here: [README.en.md](README.en.md)
+
 ## 概要
 
 Prop-5 は、JUCE フレームワークを使用して開発されたシンセサイザー・オーディオプラグイン（VST3 / Standalone 形式）です。  
