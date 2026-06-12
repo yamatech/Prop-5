@@ -473,6 +473,22 @@ bool Prop5Processor::loadPresetFromFile (const juce::File& file)
     return false;
 }
 
+double Prop5Processor::getStoredWindowScale()
+{
+    if (properties != nullptr)
+        return properties->getDoubleValue ("windowScale", 1.15);
+    return 1.15;
+}
+
+void Prop5Processor::setStoredWindowScale (double newScale)
+{
+    if (properties != nullptr)
+    {
+        properties->setValue ("windowScale", newScale);
+        properties->saveIfNeeded();
+    }
+}
+
 //==============================================================================
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

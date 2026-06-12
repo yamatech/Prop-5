@@ -46,6 +46,9 @@ public:
     void savePresetToFile (const juce::File& file);
     bool loadPresetFromFile (const juce::File& file);
 
+    double getStoredWindowScale();
+    void setStoredWindowScale (double newScale);
+
 private:
     // APVTSのパラメーターを生成・登録する関数
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

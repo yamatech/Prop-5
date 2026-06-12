@@ -7,8 +7,9 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 {
     setLookAndFeel (&lookAndFeel);
 
-    // Set window size to 1380 x 575 (1.15x of 1200x500) for Prophet-5 Grid layout
-    setSize (1380, 575);
+    // Set window size based on stored scale (default is 1.15x of 1200x500)
+    double initialScale = audioProcessor.getStoredWindowScale();
+    setSize (juce::roundToInt (1200 * initialScale), juce::roundToInt (500 * initialScale));
 
     // Helpers to setup common components
     auto setupSlider = [this] (juce::Slider& slider, juce::Label& label, const juce::String& name)
@@ -366,6 +367,48 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 
     velocityToAmpAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_amp", velocityToAmpButton);
     velocityToFilterAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_filter", velocityToFilterButton);
+
+    // --- Window Resizing UI Setup ---
+    sizeLabel.setText ("SIZE", juce::dontSendNotification);
+    sizeLabel.setJustificationType (juce::Justification::centred);
+    addAndMakeVisible (sizeLabel);
+
+    sizeCombo.addItem ("80%", 1);
+    sizeCombo.addItem ("100%", 2);
+    sizeCombo.addItem ("115%", 3);
+    sizeCombo.addItem ("130%", 4);
+    sizeCombo.addItem ("150%", 5);
+    sizeCombo.addItem ("175%", 6);
+    sizeCombo.addItem ("200%", 7);
+    addAndMakeVisible (sizeCombo);
+
+    // Select current scale
+    int selectedId = 3; // default 1.15
+    if (juce::exactlyEqual (initialScale, 0.80))       selectedId = 1;
+    else if (juce::exactlyEqual (initialScale, 1.00))  selectedId = 2;
+    else if (juce::exactlyEqual (initialScale, 1.15))  selectedId = 3;
+    else if (juce::exactlyEqual (initialScale, 1.30))  selectedId = 4;
+    else if (juce::exactlyEqual (initialScale, 1.50))  selectedId = 5;
+    else if (juce::exactlyEqual (initialScale, 1.75))  selectedId = 6;
+    else if (juce::exactlyEqual (initialScale, 2.00))  selectedId = 7;
+    sizeCombo.setSelectedId (selectedId, juce::dontSendNotification);
+
+    sizeCombo.onChange = [this]
+    {
+        double scale = 1.15;
+        switch (sizeCombo.getSelectedId())
+        {
+            case 1: scale = 0.80; break;
+            case 2: scale = 1.00; break;
+            case 3: scale = 1.15; break;
+            case 4: scale = 1.30; break;
+            case 5: scale = 1.50; break;
+            case 6: scale = 1.75; break;
+            case 7: scale = 2.00; break;
+        }
+        audioProcessor.setStoredWindowScale (scale);
+        setSize (juce::roundToInt (1200 * scale), juce::roundToInt (500 * scale));
+    };
 }
 
 Prop5Editor::~Prop5Editor()
@@ -482,10 +525,10 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
     g.drawText ("POLYPHONIC SYNTHESIZER", 30, 469, 140, 12, juce::Justification::left);
 
-    // プリセットバーの右側の空きスペース（x = 970〜1170）に、バージョン情報を右寄せで描画
+    // プリセットバーの右側の空きスペース（x = 1030〜1170）に、バージョン情報を右寄せで描画
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.4f));
     g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.0", 970, 458, 200, 20, juce::Justification::right);
+    g.drawText ("VERSION 0.9.1", 1030, 458, 140, 20, juce::Justification::right);
 }
 
 void Prop5Editor::resized()
@@ -507,6 +550,8 @@ void Prop5Editor::resized()
     saveButton.setBounds (sRect (630, prY + 10, 60, 25));
     loadButton.setBounds (sRect (700, prY + 10, 60, 25));
     setFolderButton.setBounds (sRect (770, prY + 10, 100, 25));
+    sizeLabel.setBounds (sRect (890, prY + 10, 40, 25));
+    sizeCombo.setBounds (sRect (935, prY + 10, 80, 25));
 
     // --- WHEELS Placement ---
     pitchBendSlider.setBounds (sRect (25, 60, 25, 360));

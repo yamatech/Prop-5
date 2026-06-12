@@ -220,6 +220,10 @@ private:
     std::unique_ptr<ButtonAttach> velocityToAmpAttach;
     std::unique_ptr<ButtonAttach> velocityToFilterAttach;
 
+    // --- Window Resizing ---
+    juce::ComboBox sizeCombo;
+    juce::Label sizeLabel;
+
     PropLookAndFeel lookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Prop5Editor)
