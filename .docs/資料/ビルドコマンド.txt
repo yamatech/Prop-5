@@ -1,9 +1,0 @@
-ビルドコマンド
-
-Develop command prompt で行う
-
-cd /d W:\vsti-projects\prop-5
-
-cmake -B build
-
-cmake --build build --config Debug

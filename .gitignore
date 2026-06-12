@@ -80,7 +80,7 @@ node_modules/
 *.swp
 
 # other
-.docs/
+.private/
 
 # JUCE framework
 /JUCE/
