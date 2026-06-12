@@ -6,7 +6,7 @@ add_subdirectory(JUCE)
 
 # プラグインの定義（VST3フォーマット、シンセサイザーとして設定）
 juce_add_plugin(Prop-5
-    COMPANY_NAME "YourCompany"
+    COMPANY_NAME "yamatech"
     PLUGIN_MANUFACTURER_CODE "Prop"
     PLUGIN_CODE "Prp5"
     FORMATS VST3 Standalone
