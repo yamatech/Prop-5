@@ -437,10 +437,18 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setGradientFill (rightWood);
     g.fillRect (1190, 0, 10, 500);
 
-    juce::ColourGradient bottomWood (juce::Colour (0xff361c08), 0.0f, 490.0f,
-                                     juce::Colour (0xff502b10), 0.0f, 500.0f, false);
+    juce::ColourGradient bottomWood (juce::Colour (0xff7a431c), 0.0f, 440.0f,
+                                     juce::Colour (0xff321808), 0.0f, 500.0f, false);
     g.setGradientFill (bottomWood);
-    g.fillRect (0, 490, 1200, 10);
+    g.fillRect (0, 440, 1200, 60);
+
+    // 木目テクスチャの細い横線をシミュレート
+    for (int y = 443; y < 497; y += 4)
+    {
+        float alpha = 0.03f + 0.04f * std::sin (y * 0.5f);
+        g.setColour (juce::Colour (0xff201005).withAlpha (alpha));
+        g.fillRect (10, y, 1180, 1);
+    }
 
     // 3. 各セクションの枠線とタイトルの描画
     auto drawSection = [&g] (const juce::Rectangle<int>& area, const juce::String& name, const juce::Colour& titleColor)
@@ -511,24 +519,55 @@ void Prop5Editor::paint (juce::Graphics& g)
     // PRESET BAR (白線の枠なしでスッキリさせるため、描画を省略)
     // drawSection (juce::Rectangle<int> (15, 445, 1170, 45), "", titleWhite);
 
-    // --- プラグインロゴ・エンブレム描画 ---
-    // プリセットバーの左側の空きスペース（x = 30付近）に、実機風のオレンジ/レッドの太字イタリックロゴを描画
-    g.setColour (juce::Colour (0xfff25f38)); // ヴィンテージ・オレンジ（実機ロゴインスパイア）
-    g.setFont (juce::Font ("Arial", 18.0f, juce::Font::bold | juce::Font::italic));
-    g.drawText ("Prop-5", 30, 448, 65, 22, juce::Justification::left);
-
-    // ロゴの右隣に「BETA」をオレンジ色で小さく描画
-    g.setFont (juce::Font ("Arial", 10.0f, juce::Font::bold));
-    g.drawText ("BETA", 98, 448, 40, 22, juce::Justification::left);
-
-    g.setColour (juce::Colour (0xffeae6df).withAlpha (0.5f)); // 薄いオフホワイト
+    // --- 左下の情報表示（木目パネルの上に描画） ---
+    g.setColour (juce::Colour (0xffeae6df).withAlpha (0.5f));
     g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
-    g.drawText ("POLYPHONIC SYNTHESIZER", 30, 469, 140, 12, juce::Justification::left);
+    g.drawText ("POLYPHONIC SYNTHESIZER", 25, 452, 160, 15, juce::Justification::left);
 
-    // プリセットバーの右側の空きスペース（x = 1030〜1170）に、バージョン情報を右寄せで描画
-    g.setColour (juce::Colour (0xffeae6df).withAlpha (0.4f));
-    g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.1", 1030, 458, 140, 20, juce::Justification::right);
+    g.setColour (juce::Colour (0xffeae6df).withAlpha (0.7f));
+    g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
+    g.drawText ("VERSION 0.9.2", 25, 472, 160, 15, juce::Justification::left);
+
+    // --- 右下のシルバーエンブレムプレート（ロゴ） ---
+    juce::Rectangle<float> plateArea (1030.0f, 450.0f, 145.0f, 40.0f);
+    float plateCornerSize = 4.0f;
+
+    // 1. プレートの凹み影（木目に埋め込まれた立体感を表現）
+    g.setColour (juce::Colour (0xffaa6633).withAlpha (0.4f));
+    g.fillRoundedRectangle (plateArea.translated (0.0f, 1.0f), plateCornerSize);
+    g.setColour (juce::Colour (0xff150b05));
+    g.drawRoundedRectangle (plateArea.translated (-0.5f, -0.5f), plateCornerSize, 1.0f);
+
+    // 2. メタリックシルバー背景グラデーション
+    juce::ColourGradient metalGradient (
+        juce::Colour (0xfff2f2f4), plateArea.getX(), plateArea.getY(),
+        juce::Colour (0xffbcbcc0), plateArea.getRight(), plateArea.getBottom(), false);
+    g.setGradientFill (metalGradient);
+    g.fillRoundedRectangle (plateArea, plateCornerSize);
+
+    // 3. プレートの内枠線と立体感（ベベル効果）
+    g.setColour (juce::Colour (0xffffffff).withAlpha (0.7f));
+    g.drawRoundedRectangle (plateArea, plateCornerSize, 0.5f);
+    g.setColour (juce::Colour (0xff8c8c90));
+    g.drawRoundedRectangle (plateArea.translated (0.5f, 0.5f), plateCornerSize, 0.5f);
+
+    // 暗いグレーの境界線
+    g.setColour (juce::Colour (0xff4a4a4e));
+    g.drawRoundedRectangle (plateArea, plateCornerSize, 1.0f);
+
+    // 4. ロゴテキスト "Prop-5" の描画
+    // フォントは Arial Black または Arial Bold を横に引き伸ばす
+    juce::Font logoFont ("Arial", 20.0f, juce::Font::bold | juce::Font::italic);
+    logoFont.setHorizontalScale (1.30f); // 横長にして Eurostile 風にする
+    g.setFont (logoFont);
+
+    // 立体感を出すためのシャドウ
+    g.setColour (juce::Colour (0xffffffff).withAlpha (0.7f));
+    g.drawText ("Prop-5", plateArea.translated (0.5f, 1.0f), juce::Justification::centred);
+
+    // メインテキスト
+    g.setColour (juce::Colour (0xff1f1f23));
+    g.drawText ("Prop-5", plateArea, juce::Justification::centred);
 }
 
 void Prop5Editor::resized()

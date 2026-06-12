@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(Prop-5 VERSION 0.9.1)
+project(Prop-5 VERSION 0.9.2)
 
 # JUCEのディレクトリを指定（環境に合わせて変更してください）
 add_subdirectory(JUCE)
