@@ -10,6 +10,26 @@ This synthesizer was modeled after and inspired by the legendary analog synthesi
 We plan to build release packages in the future, and development is currently active.  
 Please note that this project partially utilizes AI-assisted coding (Gemini and Antigravity).
 
+## Download and Installation Instructions (For End-Users)
+
+*Note: This release package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
+
+### 1. Download the Package
+1. Go to the [GitHub Releases page](https://github.com/yamatech/Prop-5/releases).
+2. Download `Prop-5_v[Version]_Windows.zip` from the "Assets" section of the latest release.
+3. Extract the downloaded ZIP file to any directory.
+
+### 2. Install VST3 Plugin
+1. Copy the `Prop-5.vst3` folder (the entire folder structure) from the extracted files into the following directory:
+   - **Destination Path:** `C:\Program Files\Common Files\VST3\`
+   *(Note: If the `VST3` folder does not exist, please create it. You may need Administrator privileges to perform this copy)*
+2. Restart your DAW (Cubase, Ableton Live, Studio One, Reaper, etc.) or trigger a plug-in rescan. The DAW will automatically detect the plugin.
+
+### 3. Launch Standalone App
+- `Prop-5.exe` is the Standalone version and does not require installation. You can place it anywhere and double-click to run it.
+
+---
+
 ## Prerequisites
 
 To build this project, the following tools must be installed on your system in advance:

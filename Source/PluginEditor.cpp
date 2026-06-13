@@ -7,7 +7,7 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
       settingsOverlay (p,
           [this] (double scale) {
               audioProcessor.setStoredWindowScale (scale);
-              setSize (juce::roundToInt (1200 * scale), juce::roundToInt (500 * scale));
+              setSize (juce::roundToInt (1200 * scale), juce::roundToInt (560 * scale));
               settingsOverlay.updateSizeComboSelection();
           },
           [this] {
@@ -16,9 +16,9 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 {
     setLookAndFeel (&lookAndFeel);
 
-    // Set window size based on stored scale (default is 1.15x of 1200x500)
+    // Set window size based on stored scale (default is 1.15x of 1200x560)
     double initialScale = audioProcessor.getStoredWindowScale();
-    setSize (juce::roundToInt (1200 * initialScale), juce::roundToInt (500 * initialScale));
+    setSize (juce::roundToInt (1200 * initialScale), juce::roundToInt (560 * initialScale));
 
     // Helpers to setup common components
     auto setupSlider = [this] (juce::Slider& slider, juce::Label& label, const juce::String& name)
@@ -65,7 +65,7 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
             audioProcessor.setCurrentProgram (activeProgram + 1);
     };
 
-    initButton.setButtonText ("INIT");
+    initButton.setButtonText ("RESET");
     addAndMakeVisible (initButton);
     initButton.onClick = [this]
     {
@@ -401,20 +401,20 @@ void Prop5Editor::paint (juce::Graphics& g)
     juce::ColourGradient leftWood (juce::Colour (0xff6a3b16), 0.0f, 0.0f,
                                    juce::Colour (0xff361c08), 10.0f, 0.0f, false);
     g.setGradientFill (leftWood);
-    g.fillRect (0, 0, 10, 500);
+    g.fillRect (0, 0, 10, 560);
 
     juce::ColourGradient rightWood (juce::Colour (0xff361c08), 1190.0f, 0.0f,
                                     juce::Colour (0xff6a3b16), 1200.0f, 0.0f, false);
     g.setGradientFill (rightWood);
-    g.fillRect (1190, 0, 10, 500);
+    g.fillRect (1190, 0, 10, 560);
 
-    juce::ColourGradient bottomWood (juce::Colour (0xff7a431c), 0.0f, 440.0f,
-                                     juce::Colour (0xff321808), 0.0f, 500.0f, false);
+    juce::ColourGradient bottomWood (juce::Colour (0xff7a431c), 0.0f, 500.0f,
+                                     juce::Colour (0xff321808), 0.0f, 560.0f, false);
     g.setGradientFill (bottomWood);
-    g.fillRect (0, 440, 1200, 60);
+    g.fillRect (0, 500, 1200, 60);
 
     // 木目テクスチャの細い横線をシミュレート
-    for (int y = 443; y < 497; y += 4)
+    for (int y = 503; y < 557; y += 4)
     {
         float alpha = 0.03f + 0.04f * std::sin (y * 0.5f);
         g.setColour (juce::Colour (0xff201005).withAlpha (alpha));
@@ -487,20 +487,20 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setColour (titleWhite.withAlpha (0.7f));
     g.drawText ("VELOCITY", globalArea.getX() + 12, globalArea.getY() + 175, globalArea.getWidth() - 24, 15, juce::Justification::left);
 
-    // PRESET BAR (白線の枠なしでスッキリさせるため、描画を省略)
-    // drawSection (juce::Rectangle<int> (15, 445, 1170, 45), "", titleWhite);
+    // PRESET BAR (白線の枠で囲む)
+    drawSection (juce::Rectangle<int> (260, 445, 680, 45), "", titleWhite);
 
     // --- 左下の情報表示（木目パネルの上に描画） ---
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.5f));
     g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
-    g.drawText ("POLYPHONIC SYNTHESIZER", 25, 452, 160, 15, juce::Justification::left);
+    g.drawText ("POLYPHONIC SYNTHESIZER", 25, 512, 160, 15, juce::Justification::left);
 
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.7f));
     g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.3", 25, 472, 160, 15, juce::Justification::left);
+    g.drawText ("VERSION 0.9.4", 25, 532, 160, 15, juce::Justification::left);
 
     // --- 右下のシルバーエンブレムプレート（ロゴ） ---
-    juce::Rectangle<float> plateArea (1030.0f, 450.0f, 145.0f, 40.0f);
+    juce::Rectangle<float> plateArea (1030.0f, 510.0f, 145.0f, 40.0f);
     float plateCornerSize = 4.0f;
 
     // 1. プレートの凹み影（木目に埋め込まれた立体感を表現）
@@ -552,21 +552,21 @@ void Prop5Editor::resized()
 
     // --- PRESET BAR Placement ---
     int prY = 445;
-    presetLabel.setBounds (sRect (180, prY + 10, 70, 25));
-    prevPresetButton.setBounds (sRect (250, prY + 10, 30, 25));
-    presetCombo.setBounds (sRect (290, prY + 10, 220, 25));
-    nextPresetButton.setBounds (sRect (520, prY + 10, 30, 25));
-    initButton.setBounds (sRect (570, prY + 10, 50, 25));
-    saveButton.setBounds (sRect (630, prY + 10, 60, 25));
-    loadButton.setBounds (sRect (700, prY + 10, 60, 25));
-    settingsButton.setBounds (sRect (770, prY + 10, 80, 25));
+    presetLabel.setBounds (sRect (260 + 45, prY + 10, 60, 25));
+    prevPresetButton.setBounds (sRect (260 + 115, prY + 10, 30, 25));
+    presetCombo.setBounds (sRect (260 + 155, prY + 10, 220, 25));
+    nextPresetButton.setBounds (sRect (260 + 385, prY + 10, 30, 25));
+    initButton.setBounds (sRect (260 + 435, prY + 10, 60, 25));
+    saveButton.setBounds (sRect (260 + 505, prY + 10, 60, 25));
+    loadButton.setBounds (sRect (260 + 575, prY + 10, 60, 25));
+    settingsButton.setBounds (sRect (1095, prY + 8, 80, 28));
 
     // About Button Placement
-    aboutButton.setBounds (sRect (105, 470, 40, 18));
+    aboutButton.setBounds (sRect (105, 530, 40, 18));
 
     // Overlays cover the whole screen
-    settingsOverlay.setBounds (sRect (0, 0, 1200, 500));
-    aboutOverlay.setBounds (sRect (0, 0, 1200, 500));
+    settingsOverlay.setBounds (sRect (0, 0, 1200, 560));
+    aboutOverlay.setBounds (sRect (0, 0, 1200, 560));
 
     // --- WHEELS Placement ---
     pitchBendSlider.setBounds (sRect (25, 60, 25, 360));
@@ -794,7 +794,7 @@ void SettingsOverlay::mouseDown (const juce::MouseEvent& e)
     float scale = getWidth() / 1200.0f;
     auto s = [scale] (float val) -> float { return val * scale; };
     
-    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(350.0f), s(100.0f), s(500.0f), s(300.0f)).toNearestInt();
+    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(350.0f), s(130.0f), s(500.0f), s(300.0f)).toNearestInt();
 
     if (!dialogBounds.contains (e.getPosition()))
     {
@@ -809,7 +809,7 @@ void SettingsOverlay::paint (juce::Graphics& g)
 
     g.fillAll (juce::Colours::black.withAlpha (0.6f));
 
-    juce::Rectangle<float> dialogBounds (s(350.0f), s(100.0f), s(500.0f), s(300.0f));
+    juce::Rectangle<float> dialogBounds (s(350.0f), s(130.0f), s(500.0f), s(300.0f));
     
     g.setColour (juce::Colour (0xff1f1f23));
     g.fillRoundedRectangle (dialogBounds, s(8.0f));
@@ -833,7 +833,7 @@ void SettingsOverlay::resized()
         return { s(x), s(y), s(w), s(h) };
     };
 
-    int dx = 350, dy = 100;
+    int dx = 350, dy = 130;
 
     titleLabel.setBounds (sRect (dx + 25, dy + 20, 200, 30));
     closeButton.setBounds (sRect (dx + 445, dy + 20, 30, 30));
@@ -917,7 +917,7 @@ AboutOverlay::AboutOverlay()
 
     juce::String infoText;
     infoText << "Polyphonic Synthesizer\n"
-             << "Version 0.9.3\n\n"
+             << "Version 0.9.4\n\n"
              << "Developed by yamatech\n"
              << "Copyright (C) 2026 yamatech. All rights reserved.\n\n"
              << "Released under the GNU GPL v3 License.\n\n"
@@ -934,7 +934,7 @@ void AboutOverlay::mouseDown (const juce::MouseEvent& e)
     float scale = getWidth() / 1200.0f;
     auto s = [scale] (float val) -> float { return val * scale; };
     
-    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(375.0f), s(120.0f), s(450.0f), s(260.0f)).toNearestInt();
+    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(375.0f), s(150.0f), s(450.0f), s(260.0f)).toNearestInt();
 
     if (!dialogBounds.contains (e.getPosition()))
     {
@@ -949,7 +949,7 @@ void AboutOverlay::paint (juce::Graphics& g)
 
     g.fillAll (juce::Colours::black.withAlpha (0.6f));
 
-    juce::Rectangle<float> dialogBounds (s(375.0f), s(120.0f), s(450.0f), s(260.0f));
+    juce::Rectangle<float> dialogBounds (s(375.0f), s(150.0f), s(450.0f), s(260.0f));
     
     g.setColour (juce::Colour (0xff1f1f23));
     g.fillRoundedRectangle (dialogBounds, s(8.0f));
@@ -973,7 +973,7 @@ void AboutOverlay::resized()
         return { s(x), s(y), s(w), s(h) };
     };
 
-    int dx = 375, dy = 120;
+    int dx = 375, dy = 150;
 
     titleLabel.setBounds (sRect (dx + 25, dy + 20, 200, 30));
     closeButton.setBounds (sRect (dx + 395, dy + 20, 30, 30));
