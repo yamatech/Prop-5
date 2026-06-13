@@ -419,6 +419,11 @@ juce::File Prop5Processor::getCurrentPresetFolder()
             return folder;
     }
     
+    return getDefaultPresetFolder();
+}
+
+juce::File Prop5Processor::getDefaultPresetFolder()
+{
     // デフォルト: Documents/Prop-5/Presets
     juce::File defaultFolder = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory)
                                 .getChildFile ("Prop-5")

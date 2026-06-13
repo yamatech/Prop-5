@@ -3,7 +3,16 @@
 
 //==============================================================================
 Prop5Editor::Prop5Editor (Prop5Processor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p),
+      settingsOverlay (p,
+          [this] (double scale) {
+              audioProcessor.setStoredWindowScale (scale);
+              setSize (juce::roundToInt (1200 * scale), juce::roundToInt (500 * scale));
+              settingsOverlay.updateSizeComboSelection();
+          },
+          [this] {
+              updatePresetComboBoxItems();
+          })
 {
     setLookAndFeel (&lookAndFeel);
 
@@ -156,27 +165,14 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
             });
     };
 
-    // SET FOLDER button
-    setFolderButton.setButtonText ("SET FOLDER");
-    addAndMakeVisible (setFolderButton);
-    setFolderButton.onClick = [this]
+    // SETTINGS button
+    settingsButton.setButtonText ("SETTINGS");
+    addAndMakeVisible (settingsButton);
+    settingsButton.onClick = [this]
     {
-        fileChooser = std::make_unique<juce::FileChooser> (
-            "Select Preset Folder",
-            audioProcessor.getCurrentPresetFolder(),
-            ""
-        );
-        
-        fileChooser->launchAsync (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectDirectories,
-            [this] (const juce::FileChooser& fc)
-            {
-                auto folder = fc.getResult();
-                if (folder != juce::File{} && folder.isDirectory())
-                {
-                    audioProcessor.setCurrentPresetFolder (folder);
-                    updatePresetComboBoxItems();
-                }
-            });
+        settingsOverlay.updateFolderDisplay();
+        settingsOverlay.setVisible (true);
+        settingsOverlay.toFront (true);
     };
 
     // Timer to sync Preset Combo Box from processor (DAW program selection)
@@ -368,47 +364,22 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     velocityToAmpAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_amp", velocityToAmpButton);
     velocityToFilterAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_filter", velocityToFilterButton);
 
-    // --- Window Resizing UI Setup ---
-    sizeLabel.setText ("SIZE", juce::dontSendNotification);
-    sizeLabel.setJustificationType (juce::Justification::centred);
-    addAndMakeVisible (sizeLabel);
-
-    sizeCombo.addItem ("80%", 1);
-    sizeCombo.addItem ("100%", 2);
-    sizeCombo.addItem ("115%", 3);
-    sizeCombo.addItem ("130%", 4);
-    sizeCombo.addItem ("150%", 5);
-    sizeCombo.addItem ("175%", 6);
-    sizeCombo.addItem ("200%", 7);
-    addAndMakeVisible (sizeCombo);
-
-    // Select current scale
-    int selectedId = 3; // default 1.15
-    if (juce::exactlyEqual (initialScale, 0.80))       selectedId = 1;
-    else if (juce::exactlyEqual (initialScale, 1.00))  selectedId = 2;
-    else if (juce::exactlyEqual (initialScale, 1.15))  selectedId = 3;
-    else if (juce::exactlyEqual (initialScale, 1.30))  selectedId = 4;
-    else if (juce::exactlyEqual (initialScale, 1.50))  selectedId = 5;
-    else if (juce::exactlyEqual (initialScale, 1.75))  selectedId = 6;
-    else if (juce::exactlyEqual (initialScale, 2.00))  selectedId = 7;
-    sizeCombo.setSelectedId (selectedId, juce::dontSendNotification);
-
-    sizeCombo.onChange = [this]
+    // ABOUT button
+    aboutButton.setButtonText ("About");
+    aboutButton.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentBlack);
+    aboutButton.setColour (juce::TextButton::buttonOnColourId, juce::Colours::transparentBlack);
+    aboutButton.setColour (juce::TextButton::textColourOffId, juce::Colour (0xffeae6df).withAlpha (0.6f));
+    aboutButton.setColour (juce::TextButton::textColourOnId, juce::Colour (0xffeae6df));
+    addAndMakeVisible (aboutButton);
+    aboutButton.onClick = [this]
     {
-        double scale = 1.15;
-        switch (sizeCombo.getSelectedId())
-        {
-            case 1: scale = 0.80; break;
-            case 2: scale = 1.00; break;
-            case 3: scale = 1.15; break;
-            case 4: scale = 1.30; break;
-            case 5: scale = 1.50; break;
-            case 6: scale = 1.75; break;
-            case 7: scale = 2.00; break;
-        }
-        audioProcessor.setStoredWindowScale (scale);
-        setSize (juce::roundToInt (1200 * scale), juce::roundToInt (500 * scale));
+        aboutOverlay.setVisible (true);
+        aboutOverlay.toFront (true);
     };
+
+    // Dialog overlays
+    addChildComponent (settingsOverlay);
+    addChildComponent (aboutOverlay);
 }
 
 Prop5Editor::~Prop5Editor()
@@ -526,7 +497,7 @@ void Prop5Editor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.7f));
     g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.2", 25, 472, 160, 15, juce::Justification::left);
+    g.drawText ("VERSION 0.9.3", 25, 472, 160, 15, juce::Justification::left);
 
     // --- 右下のシルバーエンブレムプレート（ロゴ） ---
     juce::Rectangle<float> plateArea (1030.0f, 450.0f, 145.0f, 40.0f);
@@ -588,9 +559,14 @@ void Prop5Editor::resized()
     initButton.setBounds (sRect (570, prY + 10, 50, 25));
     saveButton.setBounds (sRect (630, prY + 10, 60, 25));
     loadButton.setBounds (sRect (700, prY + 10, 60, 25));
-    setFolderButton.setBounds (sRect (770, prY + 10, 100, 25));
-    sizeLabel.setBounds (sRect (890, prY + 10, 40, 25));
-    sizeCombo.setBounds (sRect (935, prY + 10, 80, 25));
+    settingsButton.setBounds (sRect (770, prY + 10, 80, 25));
+
+    // About Button Placement
+    aboutButton.setBounds (sRect (105, 470, 40, 18));
+
+    // Overlays cover the whole screen
+    settingsOverlay.setBounds (sRect (0, 0, 1200, 500));
+    aboutOverlay.setBounds (sRect (0, 0, 1200, 500));
 
     // --- WHEELS Placement ---
     pitchBendSlider.setBounds (sRect (25, 60, 25, 360));
@@ -734,4 +710,274 @@ void Prop5Editor::updatePresetComboBoxItems()
         int progIndex = 13 + i;
         presetCombo.addItem (audioProcessor.getProgramName (progIndex), progIndex + 1);
     }
+}
+
+//==============================================================================
+SettingsOverlay::SettingsOverlay (Prop5Processor& p, std::function<void(double)> onScaleChanged, std::function<void()> onFolderChanged)
+    : processor (p), scaleCallback (onScaleChanged), folderCallback (onFolderChanged)
+{
+    // 閉じるボタン
+    closeButton.setButtonText ("X");
+    closeButton.onClick = [this] { setVisible (false); };
+    addAndMakeVisible (closeButton);
+
+    // タイトル
+    titleLabel.setText ("SETTINGS", juce::dontSendNotification);
+    titleLabel.setFont (juce::Font (18.0f, juce::Font::bold));
+    titleLabel.setJustificationType (juce::Justification::left);
+    titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df));
+    addAndMakeVisible (titleLabel);
+
+    // Preset Folder 項目
+    folderSectionLabel.setText ("Preset Folder:", juce::dontSendNotification);
+    folderSectionLabel.setFont (juce::Font (13.0f, juce::Font::bold));
+    folderSectionLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.8f));
+    addAndMakeVisible (folderSectionLabel);
+
+    folderPathLabel.setColour (juce::Label::backgroundColourId, juce::Colour (0xff0f0f11));
+    folderPathLabel.setColour (juce::Label::outlineColourId, juce::Colour (0xff3a3a40));
+    folderPathLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.7f));
+    folderPathLabel.setFont (juce::Font (11.0f));
+    addAndMakeVisible (folderPathLabel);
+    updateFolderDisplay();
+
+    selectFolderButton.setButtonText ("Select Folder");
+    selectFolderButton.onClick = [this] { selectFolder(); };
+    addAndMakeVisible (selectFolderButton);
+
+    defaultFolderButton.setButtonText ("Default");
+    defaultFolderButton.onClick = [this] { resetToDefaultFolder(); };
+    addAndMakeVisible (defaultFolderButton);
+
+    // Window size 項目
+    sizeSectionLabel.setText ("Window Size:", juce::dontSendNotification);
+    sizeSectionLabel.setFont (juce::Font (13.0f, juce::Font::bold));
+    sizeSectionLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.8f));
+    addAndMakeVisible (sizeSectionLabel);
+
+    sizeCombo.addItem ("80%", 1);
+    sizeCombo.addItem ("100%", 2);
+    sizeCombo.addItem ("115%", 3);
+    sizeCombo.addItem ("130%", 4);
+    sizeCombo.addItem ("150%", 5);
+    sizeCombo.addItem ("175%", 6);
+    sizeCombo.addItem ("200%", 7);
+    addAndMakeVisible (sizeCombo);
+
+    updateSizeComboSelection();
+
+    sizeCombo.onChange = [this] { changeScale(); };
+}
+
+void SettingsOverlay::updateFolderDisplay()
+{
+    juce::File currentFolder = processor.getCurrentPresetFolder();
+    folderPathLabel.setText (currentFolder.getFullPathName(), juce::dontSendNotification);
+}
+
+void SettingsOverlay::updateSizeComboSelection()
+{
+    double initialScale = processor.getStoredWindowScale();
+    int selectedId = 3;
+    if (juce::exactlyEqual (initialScale, 0.80))       selectedId = 1;
+    else if (juce::exactlyEqual (initialScale, 1.00))  selectedId = 2;
+    else if (juce::exactlyEqual (initialScale, 1.15))  selectedId = 3;
+    else if (juce::exactlyEqual (initialScale, 1.30))  selectedId = 4;
+    else if (juce::exactlyEqual (initialScale, 1.50))  selectedId = 5;
+    else if (juce::exactlyEqual (initialScale, 1.75))  selectedId = 6;
+    else if (juce::exactlyEqual (initialScale, 2.00))  selectedId = 7;
+    sizeCombo.setSelectedId (selectedId, juce::dontSendNotification);
+}
+
+void SettingsOverlay::mouseDown (const juce::MouseEvent& e)
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (float val) -> float { return val * scale; };
+    
+    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(350.0f), s(100.0f), s(500.0f), s(300.0f)).toNearestInt();
+
+    if (!dialogBounds.contains (e.getPosition()))
+    {
+        setVisible (false);
+    }
+}
+
+void SettingsOverlay::paint (juce::Graphics& g)
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (float val) -> float { return val * scale; };
+
+    g.fillAll (juce::Colours::black.withAlpha (0.6f));
+
+    juce::Rectangle<float> dialogBounds (s(350.0f), s(100.0f), s(500.0f), s(300.0f));
+    
+    g.setColour (juce::Colour (0xff1f1f23));
+    g.fillRoundedRectangle (dialogBounds, s(8.0f));
+
+    g.setColour (juce::Colour (0xffffffff).withAlpha (0.4f));
+    g.drawRoundedRectangle (dialogBounds.translated(0.0f, -0.5f), s(8.0f), s(1.0f));
+    
+    g.setColour (juce::Colour (0xff8c8c90));
+    g.drawRoundedRectangle (dialogBounds.translated(0.5f, 0.5f), s(8.0f), s(1.0f));
+
+    g.setColour (juce::Colour (0xff4a4a4e));
+    g.drawRoundedRectangle (dialogBounds, s(8.0f), s(1.5f));
+}
+
+void SettingsOverlay::resized()
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (int val) -> int { return juce::roundToInt (val * scale); };
+    auto sRect = [s] (int x, int y, int w, int h) -> juce::Rectangle<int>
+    {
+        return { s(x), s(y), s(w), s(h) };
+    };
+
+    int dx = 350, dy = 100;
+
+    titleLabel.setBounds (sRect (dx + 25, dy + 20, 200, 30));
+    closeButton.setBounds (sRect (dx + 445, dy + 20, 30, 30));
+
+    folderSectionLabel.setBounds (sRect (dx + 25, dy + 70, 200, 20));
+    folderPathLabel.setBounds (sRect (dx + 25, dy + 95, 450, 25));
+    selectFolderButton.setBounds (sRect (dx + 25, dy + 130, 120, 30));
+    defaultFolderButton.setBounds (sRect (dx + 160, dy + 130, 80, 30));
+
+    sizeSectionLabel.setBounds (sRect (dx + 25, dy + 180, 120, 30));
+    sizeCombo.setBounds (sRect (dx + 160, dy + 180, 120, 30));
+}
+
+void SettingsOverlay::selectFolder()
+{
+    fileChooser = std::make_unique<juce::FileChooser> (
+        "Select Preset Folder",
+        processor.getCurrentPresetFolder(),
+        ""
+    );
+    
+    fileChooser->launchAsync (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectDirectories,
+        [this] (const juce::FileChooser& fc)
+        {
+            auto folder = fc.getResult();
+            if (folder != juce::File{} && folder.isDirectory())
+            {
+                processor.setCurrentPresetFolder (folder);
+                updateFolderDisplay();
+                if (folderCallback)
+                    folderCallback();
+            }
+        });
+}
+
+void SettingsOverlay::resetToDefaultFolder()
+{
+    processor.setCurrentPresetFolder (processor.getDefaultPresetFolder());
+    updateFolderDisplay();
+    if (folderCallback)
+        folderCallback();
+}
+
+void SettingsOverlay::changeScale()
+{
+    double scale = 1.15;
+    switch (sizeCombo.getSelectedId())
+    {
+        case 1: scale = 0.80; break;
+        case 2: scale = 1.00; break;
+        case 3: scale = 1.15; break;
+        case 4: scale = 1.30; break;
+        case 5: scale = 1.50; break;
+        case 6: scale = 1.75; break;
+        case 7: scale = 2.00; break;
+    }
+    if (scaleCallback)
+        scaleCallback (scale);
+}
+
+//==============================================================================
+AboutOverlay::AboutOverlay()
+{
+    closeButton.setButtonText ("X");
+    closeButton.onClick = [this] { setVisible (false); };
+    addAndMakeVisible (closeButton);
+
+    titleLabel.setText ("ABOUT", juce::dontSendNotification);
+    titleLabel.setFont (juce::Font (18.0f, juce::Font::bold));
+    titleLabel.setJustificationType (juce::Justification::left);
+    titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df));
+    addAndMakeVisible (titleLabel);
+
+    logoLabel.setText ("Prop-5", juce::dontSendNotification);
+    juce::Font logoFont ("Arial", 32.0f, juce::Font::bold | juce::Font::italic);
+    logoFont.setHorizontalScale (1.30f);
+    logoLabel.setFont (logoFont);
+    logoLabel.setJustificationType (juce::Justification::centred);
+    logoLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df));
+    addAndMakeVisible (logoLabel);
+
+    juce::String infoText;
+    infoText << "Polyphonic Synthesizer\n"
+             << "Version 0.9.3\n\n"
+             << "Developed by yamatech\n"
+             << "Copyright (C) 2026 yamatech. All rights reserved.\n\n"
+             << "Released under the GNU GPL v3 License.\n\n"
+             << "Based on JUCE Framework.";
+    infoLabel.setText (infoText, juce::dontSendNotification);
+    infoLabel.setFont (juce::Font (12.0f, juce::Font::plain));
+    infoLabel.setJustificationType (juce::Justification::centred);
+    infoLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.8f));
+    addAndMakeVisible (infoLabel);
+}
+
+void AboutOverlay::mouseDown (const juce::MouseEvent& e)
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (float val) -> float { return val * scale; };
+    
+    juce::Rectangle<int> dialogBounds = juce::Rectangle<float> (s(375.0f), s(120.0f), s(450.0f), s(260.0f)).toNearestInt();
+
+    if (!dialogBounds.contains (e.getPosition()))
+    {
+        setVisible (false);
+    }
+}
+
+void AboutOverlay::paint (juce::Graphics& g)
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (float val) -> float { return val * scale; };
+
+    g.fillAll (juce::Colours::black.withAlpha (0.6f));
+
+    juce::Rectangle<float> dialogBounds (s(375.0f), s(120.0f), s(450.0f), s(260.0f));
+    
+    g.setColour (juce::Colour (0xff1f1f23));
+    g.fillRoundedRectangle (dialogBounds, s(8.0f));
+
+    g.setColour (juce::Colour (0xffffffff).withAlpha (0.4f));
+    g.drawRoundedRectangle (dialogBounds.translated(0.0f, -0.5f), s(8.0f), s(1.0f));
+    
+    g.setColour (juce::Colour (0xff8c8c90));
+    g.drawRoundedRectangle (dialogBounds.translated(0.5f, 0.5f), s(8.0f), s(1.0f));
+
+    g.setColour (juce::Colour (0xff4a4a4e));
+    g.drawRoundedRectangle (dialogBounds, s(8.0f), s(1.5f));
+}
+
+void AboutOverlay::resized()
+{
+    float scale = getWidth() / 1200.0f;
+    auto s = [scale] (int val) -> int { return juce::roundToInt (val * scale); };
+    auto sRect = [s] (int x, int y, int w, int h) -> juce::Rectangle<int>
+    {
+        return { s(x), s(y), s(w), s(h) };
+    };
+
+    int dx = 375, dy = 120;
+
+    titleLabel.setBounds (sRect (dx + 25, dy + 20, 200, 30));
+    closeButton.setBounds (sRect (dx + 395, dy + 20, 30, 30));
+
+    logoLabel.setBounds (sRect (dx + 50, dy + 60, 350, 45));
+    infoLabel.setBounds (sRect (dx + 50, dy + 115, 350, 120));
 }

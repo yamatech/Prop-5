@@ -5,6 +5,60 @@
 #include "PropLookAndFeel.h"
 
 //==============================================================================
+class SettingsOverlay : public juce::Component
+{
+public:
+    SettingsOverlay (Prop5Processor& p, std::function<void(double)> onScaleChanged, std::function<void()> onFolderChanged);
+    ~SettingsOverlay() override = default;
+
+    void paint (juce::Graphics&) override;
+    void resized() override;
+    void updateFolderDisplay();
+    void updateSizeComboSelection();
+    void mouseDown (const juce::MouseEvent& e) override;
+
+private:
+    void selectFolder();
+    void resetToDefaultFolder();
+    void changeScale();
+
+    Prop5Processor& processor;
+    std::function<void(double)> scaleCallback;
+    std::function<void()> folderCallback;
+
+    juce::Label titleLabel;
+    juce::TextButton closeButton;
+    juce::Label folderSectionLabel;
+    juce::Label folderPathLabel;
+    juce::TextButton selectFolderButton;
+    juce::TextButton defaultFolderButton;
+    juce::Label sizeSectionLabel;
+    juce::ComboBox sizeCombo;
+
+    std::unique_ptr<juce::FileChooser> fileChooser;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SettingsOverlay)
+};
+
+//==============================================================================
+class AboutOverlay : public juce::Component
+{
+public:
+    AboutOverlay();
+    ~AboutOverlay() override = default;
+
+    void paint (juce::Graphics&) override;
+    void resized() override;
+    void mouseDown (const juce::MouseEvent& e) override;
+
+private:
+    juce::Label titleLabel;
+    juce::TextButton closeButton;
+    juce::Label logoLabel;
+    juce::Label infoLabel;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AboutOverlay)
+};
+
+//==============================================================================
 class Prop5Editor : public juce::AudioProcessorEditor,
                     private juce::Timer
 {
@@ -29,7 +83,7 @@ private:
     juce::TextButton initButton;
     juce::TextButton saveButton;
     juce::TextButton loadButton;
-    juce::TextButton setFolderButton;
+    juce::TextButton settingsButton;
     void updatePresetComboBoxItems();
     std::unique_ptr<juce::FileChooser> fileChooser;
 
@@ -220,9 +274,10 @@ private:
     std::unique_ptr<ButtonAttach> velocityToAmpAttach;
     std::unique_ptr<ButtonAttach> velocityToFilterAttach;
 
-    // --- Window Resizing ---
-    juce::ComboBox sizeCombo;
-    juce::Label sizeLabel;
+    // --- Window Resizing & Dialogs ---
+    juce::TextButton aboutButton;
+    SettingsOverlay settingsOverlay;
+    AboutOverlay aboutOverlay;
 
     PropLookAndFeel lookAndFeel;
 

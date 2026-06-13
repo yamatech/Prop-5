@@ -38,6 +38,7 @@ public:
 
     // --- Preset Folder / Settings ---
     juce::File getCurrentPresetFolder();
+    juce::File getDefaultPresetFolder();
     void setCurrentPresetFolder (const juce::File& newFolder);
     void scanPresets();
     
