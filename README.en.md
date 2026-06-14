@@ -15,22 +15,27 @@ Please note that this project partially utilizes AI-assisted coding (Gemini and 
 *Note: This release package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
 
 ### 1. Download the Package
+
 1. Go to the [GitHub Releases page](https://github.com/yamatech/Prop-5/releases).
 2. Download `Prop-5_v[Version]_Windows.zip` from the "Assets" section of the latest release.
 3. Extract the downloaded ZIP file to any directory.
 
 ### 2. Install VST3 Plugin
+
 1. Copy the `Prop-5.vst3` folder (the entire folder structure) from the extracted files into the following directory:
    - **Destination Path:** `C:\Program Files\Common Files\VST3\`
    *(Note: If the `VST3` folder does not exist, please create it. You may need Administrator privileges to perform this copy)*
 2. Restart your DAW (Cubase, Ableton Live, Studio One, Reaper, etc.) or trigger a plug-in rescan. The DAW will automatically detect the plugin.
 
 ### 3. Launch Standalone App
+
 - `Prop-5.exe` is the Standalone version and does not require installation. You can place it anywhere and double-click to run it.
 
 ---
 
-## Prerequisites
+## Source Code Build Instructions (For Developers)
+
+### Prerequisites
 
 To build this project, the following tools must be installed on your system in advance:
 
@@ -47,6 +52,7 @@ To build this project, the following tools must be installed on your system in a
 This repository does not include the JUCE framework source code itself (it is excluded by `.gitignore`). Before building, you need to place JUCE in the root directory of the project.
 
 ### 1. Clone the Repository
+
 First, clone this repository.
 
 ```bash
@@ -55,9 +61,11 @@ cd Prop-5
 ```
 
 ### 2. Place JUCE
+
 Place the JUCE framework directly under the project root with the folder name `JUCE`.
 
 #### Method A: Get using Git (Recommended)
+
 Clone the official JUCE repository and check out the version verified to work with the project (e.g., `7.0.12`).
 
 ```bash
@@ -68,6 +76,7 @@ cd ..
 ```
 
 #### Method B: Download Manually
+
 1. Download the zip file from the [JUCE Official Website](https://juce.com/download/).
 2. Extract the file and place the `JUCE` folder directly in the root of this project.
    (Make sure `Prop-5/JUCE/CMakeLists.txt` exists in this layout)
@@ -79,6 +88,7 @@ cd ..
 Use CMake for building. Execute the following commands in the root directory of the project.
 
 ### 1. Create and Configure Build Directory
+
 ```bash
 mkdir build
 cd build
@@ -86,6 +96,7 @@ cmake ..
 ```
 
 ### 2. Run the Compilation
+
 To perform a release build, run the following command:
 
 ```bash

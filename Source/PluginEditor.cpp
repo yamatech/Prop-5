@@ -497,7 +497,7 @@ void Prop5Editor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.7f));
     g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.4", 25, 532, 160, 15, juce::Justification::left);
+    g.drawText ("VERSION 0.9.5", 25, 532, 160, 15, juce::Justification::left);
 
     // --- 右下のシルバーエンブレムプレート（ロゴ） ---
     juce::Rectangle<float> plateArea (1030.0f, 510.0f, 145.0f, 40.0f);
@@ -528,7 +528,7 @@ void Prop5Editor::paint (juce::Graphics& g)
 
     // 4. ロゴテキスト "Prop-5" の描画
     // フォントは Arial Black または Arial Bold を横に引き伸ばす
-    juce::Font logoFont ("Arial", 20.0f, juce::Font::bold | juce::Font::italic);
+    juce::Font logoFont (juce::Font::getDefaultSerifFontName(), 24.0f, juce::Font::bold);
     logoFont.setHorizontalScale (1.30f); // 横長にして Eurostile 風にする
     g.setFont (logoFont);
 
@@ -908,7 +908,7 @@ AboutOverlay::AboutOverlay()
     addAndMakeVisible (titleLabel);
 
     logoLabel.setText ("Prop-5", juce::dontSendNotification);
-    juce::Font logoFont ("Arial", 32.0f, juce::Font::bold | juce::Font::italic);
+    juce::Font logoFont (juce::Font::getDefaultSerifFontName(), 36.0f, juce::Font::bold);
     logoFont.setHorizontalScale (1.30f);
     logoLabel.setFont (logoFont);
     logoLabel.setJustificationType (juce::Justification::centred);
@@ -917,7 +917,7 @@ AboutOverlay::AboutOverlay()
 
     juce::String infoText;
     infoText << "Polyphonic Synthesizer\n"
-             << "Version 0.9.4\n\n"
+             << "Version 0.9.5\n\n"
              << "Developed by yamatech\n"
              << "Copyright (C) 2026 yamatech. All rights reserved.\n\n"
              << "Released under the GNU GPL v3 License.\n\n"

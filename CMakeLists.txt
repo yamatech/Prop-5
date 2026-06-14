@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(Prop-5 VERSION 0.9.4)
+project(Prop-5 VERSION 0.9.5)
 
 # JUCEのディレクトリを指定（環境に合わせて変更してください）
 add_subdirectory(JUCE)
@@ -11,6 +11,8 @@ juce_add_plugin(Prop-5
     PLUGIN_CODE "Prp5"
     FORMATS VST3 Standalone
     PRODUCT_NAME "Prop-5"
+    ICON_BIG "${CMAKE_CURRENT_SOURCE_DIR}/Assets/icon.png"
+    ICON_SMALL "${CMAKE_CURRENT_SOURCE_DIR}/Assets/icon.png"
     IS_SYNTH TRUE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT FALSE
@@ -67,3 +69,18 @@ target_link_libraries(Prop-5 PRIVATE
 
 # ヘッダ検索パスの追加
 target_include_directories(Prop-5 PRIVATE Source)
+
+# Windows環境での VST3 フォルダアイコン化の解除
+# (VST3フォルダ自体がカスタムアイコン化されるのを防ぎ、通常のフォルダ表示に戻す)
+if(WIN32)
+    if(TARGET Prop-5_VST3)
+        set(vst3_dir "${CMAKE_BINARY_DIR}/Prop-5_artefacts/$<CONFIG>/VST3/Prop-5.vst3")
+        add_custom_command(TARGET Prop-5_VST3 POST_BUILD
+            COMMAND attrib -s "${vst3_dir}"
+            COMMAND ${CMAKE_COMMAND} -E remove "${vst3_dir}/desktop.ini"
+            COMMAND ${CMAKE_COMMAND} -E remove "${vst3_dir}/Plugin.ico"
+            COMMENT "Removing custom folder icon from VST3 bundle..."
+            VERBATIM
+        )
+    endif()
+endif()
