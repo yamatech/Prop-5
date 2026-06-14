@@ -1,7 +1,7 @@
 CompileFlags:
   Add:
-    - "-IW:/vsti-projects/Prop-5/build/Prop-5_artefacts/JuceLibraryCode"
-    - "-IW:/vsti-projects/Prop-5/JUCE/modules"
-    - "-IW:/vsti-projects/Prop-5/Source"
+    - "-Ibuild/Prop-5_artefacts/JuceLibraryCode"
+    - "-IJUCE/modules"
+    - "-ISource"
     - "-std=c++17"
     - "-DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1"
