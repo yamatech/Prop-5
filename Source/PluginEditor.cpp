@@ -492,7 +492,7 @@ void Prop5Editor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.7f));
     g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
-    g.drawText ("VERSION 0.9.5", 25, 532, 160, 15, juce::Justification::left);
+    g.drawText ("VERSION 0.9.6", 25, 532, 160, 15, juce::Justification::left);
 
     // --- 右下のシルバーエンブレムプレート（ロゴ） ---
     juce::Rectangle<float> plateArea (1030.0f, 510.0f, 145.0f, 40.0f);
@@ -914,7 +914,7 @@ AboutOverlay::AboutOverlay()
 
     juce::String infoText;
     infoText << "Polyphonic Synthesizer\n"
-             << "Version 0.9.5\n\n"
+             << "Version 0.9.6\n\n"
              << "Developed by yamatech\n"
              << "Copyright (C) 2026 yamatech. All rights reserved.\n\n"
              << "Released under the GNU GPL v3 License.\n\n"
