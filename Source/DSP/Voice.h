@@ -109,8 +109,8 @@ private:
 
     // Velocity state
     float currentVelocity = 1.0f;
-    bool velocityToAmp = false;
-    bool velocityToFilter = false;
+    float velocityToAmp = 0.0f;
+    float velocityToFilter = 0.0f;
 
     // Glide state
     float glideTimeMs = 0.0f;

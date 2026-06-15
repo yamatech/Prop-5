@@ -120,9 +120,9 @@ void Prop5Voice::updateParameters(const juce::AudioProcessorValueTreeState& apvt
 
     // Read velocity parameters
     if (apvts.getRawParameterValue("velocity_to_amp") != nullptr)
-        velocityToAmp = apvts.getRawParameterValue("velocity_to_amp")->load() > 0.5f;
+        velocityToAmp = apvts.getRawParameterValue("velocity_to_amp")->load();
     if (apvts.getRawParameterValue("velocity_to_filter") != nullptr)
-        velocityToFilter = apvts.getRawParameterValue("velocity_to_filter")->load() > 0.5f;
+        velocityToFilter = apvts.getRawParameterValue("velocity_to_filter")->load();
 }
 
 void Prop5Voice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition)
@@ -347,8 +347,8 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         mixVal += noiseSig * mixNoise;
 
         // --- VCF (Ladder Filter) ---
-        float filterVelocityScale = velocityToFilter ? (0.1f + 0.9f * velPower) : 1.0f;
-        float cutoffVelocityScale = velocityToFilter ? std::pow(2.0f, (velPower - 1.0f) * 2.0f) : 1.0f;
+        float filterVelocityScale = 1.0f + velocityToFilter * ((0.1f + 0.9f * velPower) - 1.0f);
+        float cutoffVelocityScale = 1.0f + velocityToFilter * (std::pow(2.0f, (velPower - 1.0f) * 2.0f) - 1.0f);
         filter.setParameters(baseCutoff * cutoffVelocityScale, baseResonance, vcfEnvAmt * filterVelocityScale, vcfKbTrack);
 
         float totalFilterMod = envAVal;
@@ -365,7 +365,7 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         float filterVal = filter.processSample(mixVal, totalFilterMod, currentGlideNote);
 
         // --- VCA Output ---
-        float ampVelocityScale = velocityToAmp ? (0.05f + 0.95f * velPower) : 1.0f;
+        float ampVelocityScale = 1.0f + velocityToAmp * ((0.05f + 0.95f * velPower) - 1.0f);
         float outputVal = filterVal * envBVal * masterVolume * 0.2f * ampVelocityScale;
 
         outputBuffer.addSample(0, startSample + sample, outputVal);

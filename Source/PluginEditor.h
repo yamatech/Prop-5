@@ -195,8 +195,10 @@ private:
     juce::Label envBRelLabel;
 
     // --- Velocity ---
-    juce::ToggleButton velocityToAmpButton;
-    juce::ToggleButton velocityToFilterButton;
+    juce::Slider velocityToAmpSlider;
+    juce::Label velocityToAmpLabel;
+    juce::Slider velocityToFilterSlider;
+    juce::Label velocityToFilterLabel;
 
     // --- Attachments ---
     using SliderAttach = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -271,8 +273,8 @@ private:
     std::unique_ptr<SliderAttach> envBRelAttach;
 
     // Velocity Attachments
-    std::unique_ptr<ButtonAttach> velocityToAmpAttach;
-    std::unique_ptr<ButtonAttach> velocityToFilterAttach;
+    std::unique_ptr<SliderAttach> velocityToAmpAttach;
+    std::unique_ptr<SliderAttach> velocityToFilterAttach;
 
     // --- Window Resizing & Dialogs ---
     juce::TextButton aboutButton;

@@ -67,7 +67,9 @@ inline std::vector<Preset> getFactoryPresets()
         {"wheel_mod_dest_pw_b", 0.0f},
         {"wheel_mod_dest_filter", 0.0f},
         {"pitchbend", 0.0f},
-        {"modwheel", 0.0f}
+        {"modwheel", 0.0f},
+        {"velocity_to_amp", 0.0f},
+        {"velocity_to_filter", 0.0f}
     };
     presets.push_back(initPatch);
 

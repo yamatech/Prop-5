@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "PresetData.h"
 
 class Prop5Processor : public juce::AudioProcessor
 {
@@ -30,6 +31,8 @@ public:
     const juce::String getProgramName (int index) override;
     void changeProgramName (int index, const juce::String& newName) override;
     
+    void resetCurrentProgram();
+    
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
@@ -58,6 +61,10 @@ private:
     juce::Synthesiser synth;
 
     int currentProgram { 0 };
+
+    std::vector<Preset> programStates;
+    void saveCurrentStateToMemory();
+    void loadStateFromMemory (int index);
 
     // グローバル設定管理
     std::unique_ptr<juce::PropertiesFile> properties;

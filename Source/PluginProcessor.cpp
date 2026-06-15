@@ -28,6 +28,9 @@ Prop5Processor::Prop5Processor()
     options.storageFormat = juce::PropertiesFile::storeAsXML;
     properties = std::make_unique<juce::PropertiesFile>(options);
 
+    // ファクトリープリセットでメモリ状態を初期化
+    programStates = getFactoryPresets();
+
     // ユーザープリセットのスキャン
     scanPresets();
 }
@@ -76,44 +79,140 @@ void Prop5Processor::setCurrentProgram(int index)
 {
     if (index >= 0 && index < getNumPrograms())
     {
+        // 1. 現在のパラメータ状態をメモリに退避
+        saveCurrentStateToMemory();
+
         currentProgram = index;
+
+        // メモリ配列のサイズ拡張が必要であれば拡張
+        if (static_cast<size_t>(index) >= programStates.size())
+        {
+            programStates.resize(index + 1);
+        }
+
+        auto& pState = programStates[index];
+
         if (index < 13)
         {
-            auto factoryPresets = getFactoryPresets();
-            if (index < factoryPresets.size())
+            // ファクトリープリセット
+            if (pState.parameters.empty())
             {
-                auto& preset = factoryPresets[index];
-                for (auto& param : preset.parameters)
+                auto factoryPresets = getFactoryPresets();
+                if (index < factoryPresets.size())
                 {
-                    if (auto* p = apvts.getParameter(param.first))
+                    pState = factoryPresets[index];
+                }
+            }
+            loadStateFromMemory(index);
+        }
+        else
+        {
+            // ユーザープリセット
+            if (pState.parameters.empty())
+            {
+                int fileIdx = index - 13;
+                if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
+                {
+                    loadPresetFromFile (userPresetFiles[fileIdx]);
+                    
+                    // ロードした状態をメモリにキャッシュ
+                    pState.name = userPresetFiles[fileIdx].getFileNameWithoutExtension();
+                    pState.parameters.clear();
+                    for (auto* param : apvts.processor.getParameters())
                     {
-                        float val = param.second;
-                        if (auto* floatParam = dynamic_cast<juce::AudioParameterFloat*>(p))
+                        if (auto* p = dynamic_cast<juce::RangedAudioParameter*>(param))
                         {
-                            *floatParam = val;
-                        }
-                        else if (auto* boolParam = dynamic_cast<juce::AudioParameterBool*>(p))
-                        {
-                            *boolParam = (val > 0.5f);
-                        }
-                        else if (auto* choiceParam = dynamic_cast<juce::AudioParameterChoice*>(p))
-                        {
-                            *choiceParam = static_cast<int>(val);
+                            pState.parameters[p->paramID] = apvts.getRawParameterValue(p->paramID)->load();
                         }
                     }
                 }
             }
-        }
-        else
-        {
-            int fileIdx = index - 13;
-            if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
+            else
             {
-                loadPresetFromFile (userPresetFiles[fileIdx]);
+                loadStateFromMemory(index);
             }
         }
 
         updateHostDisplay();
+    }
+}
+
+void Prop5Processor::saveCurrentStateToMemory()
+{
+    if (currentProgram >= 0 && static_cast<size_t>(currentProgram) < programStates.size())
+    {
+        auto& pState = programStates[currentProgram];
+        pState.parameters.clear();
+        for (auto* param : apvts.processor.getParameters())
+        {
+            if (auto* p = dynamic_cast<juce::RangedAudioParameter*>(param))
+            {
+                pState.parameters[p->paramID] = apvts.getRawParameterValue(p->paramID)->load();
+            }
+        }
+    }
+}
+
+void Prop5Processor::loadStateFromMemory(int index)
+{
+    if (index >= 0 && static_cast<size_t>(index) < programStates.size())
+    {
+        auto& pState = programStates[index];
+        for (auto& param : pState.parameters)
+        {
+            if (auto* p = apvts.getParameter(param.first))
+            {
+                float val = param.second;
+                if (auto* floatParam = dynamic_cast<juce::AudioParameterFloat*>(p))
+                {
+                    *floatParam = val;
+                }
+                else if (auto* boolParam = dynamic_cast<juce::AudioParameterBool*>(p))
+                {
+                    *boolParam = (val > 0.5f);
+                }
+                else if (auto* choiceParam = dynamic_cast<juce::AudioParameterChoice*>(p))
+                {
+                    *choiceParam = static_cast<int>(val);
+                }
+            }
+        }
+    }
+}
+
+void Prop5Processor::resetCurrentProgram()
+{
+    if (currentProgram >= 0 && currentProgram < 13)
+    {
+        // ファクトリープリセットの初期値でメモリを上書きしてロード
+        auto factoryPresets = getFactoryPresets();
+        if (static_cast<size_t>(currentProgram) < factoryPresets.size())
+        {
+            programStates[currentProgram] = factoryPresets[currentProgram];
+            loadStateFromMemory (currentProgram);
+        }
+    }
+    else if (currentProgram >= 13)
+    {
+        // ユーザープリセットの場合は、ファイルからロードし直す
+        int fileIdx = currentProgram - 13;
+        if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
+        {
+            loadPresetFromFile (userPresetFiles[fileIdx]);
+            // メモリを同期
+            if (static_cast<size_t>(currentProgram) < programStates.size())
+            {
+                auto& pState = programStates[currentProgram];
+                pState.parameters.clear();
+                for (auto* param : apvts.processor.getParameters())
+                {
+                    if (auto* p = dynamic_cast<juce::RangedAudioParameter*>(param))
+                    {
+                        pState.parameters[p->paramID] = apvts.getRawParameterValue(p->paramID)->load();
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -401,8 +500,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout Prop5Processor::createParame
     layout.add(std::make_unique<juce::AudioParameterFloat>("modwheel", "Modulation Wheel", 0.0f, 1.0f, 0.0f));
 
     // 13. Velocity Controls
-    layout.add(std::make_unique<juce::AudioParameterBool>("velocity_to_amp", "Velocity to Amp", false));
-    layout.add(std::make_unique<juce::AudioParameterBool>("velocity_to_filter", "Velocity to Filter", false));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("velocity_to_amp", "Velocity to Amp", 0.0f, 1.0f, 0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("velocity_to_filter", "Velocity to Filter", 0.0f, 1.0f, 0.0f));
 
     return layout;
 }

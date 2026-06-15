@@ -69,7 +69,7 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     addAndMakeVisible (initButton);
     initButton.onClick = [this]
     {
-        audioProcessor.setCurrentProgram (0);
+        audioProcessor.resetCurrentProgram();
     };
 
     addAndMakeVisible (presetCombo);
@@ -358,11 +358,11 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     envBRelAttach = std::make_unique<SliderAttach>(audioProcessor.apvts, "env_b_rel", envBRelSlider);
 
     // --- Velocity Setup ---
-    setupToggle (velocityToAmpButton, "AMP");
-    setupToggle (velocityToFilterButton, "FILT");
+    setupSlider (velocityToFilterSlider, velocityToFilterLabel, "FILT");
+    setupSlider (velocityToAmpSlider, velocityToAmpLabel, "AMP");
 
-    velocityToAmpAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_amp", velocityToAmpButton);
-    velocityToFilterAttach = std::make_unique<ButtonAttach>(audioProcessor.apvts, "velocity_to_filter", velocityToFilterButton);
+    velocityToFilterAttach = std::make_unique<SliderAttach>(audioProcessor.apvts, "velocity_to_filter", velocityToFilterSlider);
+    velocityToAmpAttach = std::make_unique<SliderAttach>(audioProcessor.apvts, "velocity_to_amp", velocityToAmpSlider);
 
     // ABOUT button
     aboutButton.setButtonText ("About");
@@ -476,16 +476,11 @@ void Prop5Editor::paint (juce::Graphics& g)
     // COLUMN 4
     drawSection (juce::Rectangle<int> (925, 15, 265, 130), "VCA ENV", titleGold);
     
-    // GLOBAL は内部に線を描く
-    juce::Rectangle<int> globalArea (925, 155, 265, 280);
-    drawSection (globalArea, "GLOBAL", titleGold);
+    // VELOCITY
+    drawSection (juce::Rectangle<int> (925, 155, 265, 110), "VELOCITY", titleGold);
     
-    // VELOCITY 用の内部境界線（立体感をなくしたフラットなライン）
-    g.setColour (juce::Colour (0xff3a3a40));
-    g.drawHorizontalLine (globalArea.getY() + 170, globalArea.getX() + 5, globalArea.getRight() - 5);
-    g.setFont (juce::Font (11.0f, juce::Font::plain));
-    g.setColour (titleWhite.withAlpha (0.7f));
-    g.drawText ("VELOCITY", globalArea.getX() + 12, globalArea.getY() + 175, globalArea.getWidth() - 24, 15, juce::Justification::left);
+    // GLOBAL
+    drawSection (juce::Rectangle<int> (925, 275, 265, 160), "GLOBAL", titleGold);
 
     // PRESET BAR (白線の枠で囲む)
     drawSection (juce::Rectangle<int> (260, 445, 680, 45), "", titleWhite);
@@ -649,8 +644,13 @@ void Prop5Editor::resized()
     envBSusSlider.setBounds (sRect (vcaX + 135, vcaY + 45, 50, 50));
     envBRelSlider.setBounds (sRect (vcaX + 195, vcaY + 45, 50, 50));
 
+    // --- VELOCITY Placement ---
+    int velX = 925, velY = 155;
+    velocityToFilterSlider.setBounds (sRect (velX + 45, velY + 45, 50, 50));
+    velocityToAmpSlider.setBounds (sRect (velX + 135, velY + 45, 50, 50));
+
     // --- GLOBAL Placement ---
-    int glX = 925, glY = 155;
+    int glX = 925, glY = 275;
     glideSlider.setBounds (sRect (glX + 15, glY + 45, 50, 50));
     masterTuneSlider.setBounds (sRect (glX + 75, glY + 45, 50, 50));
     pbRangeSlider.setBounds (sRect (glX + 135, glY + 45, 50, 50));
@@ -658,9 +658,6 @@ void Prop5Editor::resized()
 
     unisonButton.setBounds (sRect (glX + 45, glY + 112, 75, 40));
     holdButton.setBounds (sRect (glX + 135, glY + 112, 75, 40));
-
-    velocityToFilterButton.setBounds (sRect (glX + 45, glY + 202, 75, 40));
-    velocityToAmpButton.setBounds (sRect (glX + 135, glY + 202, 75, 40));
 }
 
 void Prop5Editor::timerCallback()
