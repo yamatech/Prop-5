@@ -29,6 +29,7 @@ void Prop5Voice::prepare(double sampleRate, int samplesPerBlock, int numOutputCh
     lfoPhase = 0.0f;
     currentMidiNote = -1;
     currentPitchWheelOffset = 0.0f;
+    lastPhaseB = 0.0f;
 
     currentGlideNote = 60.0f;
     targetGlideNote = 60.0f;
@@ -144,6 +145,7 @@ void Prop5Voice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 
     envA.noteOn();
     envB.noteOn();
+    lastPhaseB = 0.0f;
 }
 
 void Prop5Voice::stopNote(float velocity, bool allowTailOff)
@@ -326,7 +328,6 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         // Hard Sync
         if (oscSync)
         {
-            static float lastPhaseB = 0.0f;
             float currentPhaseB = oscB.getPhase();
             if (currentPhaseB < lastPhaseB)
             {

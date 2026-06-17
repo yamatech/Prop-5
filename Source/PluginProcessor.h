@@ -46,6 +46,7 @@ public:
     void scanPresets();
     
     juce::Array<juce::File> userPresetFiles;
+    std::vector<Preset> factoryPresets;
     
     void savePresetToFile (const juce::File& file);
     bool loadPresetFromFile (const juce::File& file);

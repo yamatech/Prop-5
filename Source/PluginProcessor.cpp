@@ -29,7 +29,8 @@ Prop5Processor::Prop5Processor()
     properties = std::make_unique<juce::PropertiesFile>(options);
 
     // ファクトリープリセットでメモリ状態を初期化
-    programStates = getFactoryPresets();
+    factoryPresets = getFactoryPresets();
+    programStates = factoryPresets;
 
     // ユーザープリセットのスキャン
     scanPresets();
@@ -67,7 +68,7 @@ double Prop5Processor::getTailLengthSeconds() const
 
 int Prop5Processor::getNumPrograms()
 {
-    return 13 + userPresetFiles.size();
+    return static_cast<int>(factoryPresets.size()) + userPresetFiles.size();
 }
 
 int Prop5Processor::getCurrentProgram()
@@ -91,14 +92,14 @@ void Prop5Processor::setCurrentProgram(int index)
         }
 
         auto& pState = programStates[index];
+        int factorySize = static_cast<int>(factoryPresets.size());
 
-        if (index < 13)
+        if (index < factorySize)
         {
             // ファクトリープリセット
             if (pState.parameters.empty())
             {
-                auto factoryPresets = getFactoryPresets();
-                if (index < factoryPresets.size())
+                if (index < factorySize)
                 {
                     pState = factoryPresets[index];
                 }
@@ -110,7 +111,7 @@ void Prop5Processor::setCurrentProgram(int index)
             // ユーザープリセット
             if (pState.parameters.empty())
             {
-                int fileIdx = index - 13;
+                int fileIdx = index - factorySize;
                 if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
                 {
                     loadPresetFromFile (userPresetFiles[fileIdx]);
@@ -182,20 +183,20 @@ void Prop5Processor::loadStateFromMemory(int index)
 
 void Prop5Processor::resetCurrentProgram()
 {
-    if (currentProgram >= 0 && currentProgram < 13)
+    int factorySize = static_cast<int>(factoryPresets.size());
+    if (currentProgram >= 0 && currentProgram < factorySize)
     {
         // ファクトリープリセットの初期値でメモリを上書きしてロード
-        auto factoryPresets = getFactoryPresets();
         if (static_cast<size_t>(currentProgram) < factoryPresets.size())
         {
             programStates[currentProgram] = factoryPresets[currentProgram];
             loadStateFromMemory (currentProgram);
         }
     }
-    else if (currentProgram >= 13)
+    else if (currentProgram >= factorySize)
     {
         // ユーザープリセットの場合は、ファイルからロードし直す
-        int fileIdx = currentProgram - 13;
+        int fileIdx = currentProgram - factorySize;
         if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
         {
             loadPresetFromFile (userPresetFiles[fileIdx]);
@@ -218,10 +219,10 @@ void Prop5Processor::resetCurrentProgram()
 
 const juce::String Prop5Processor::getProgramName(int index)
 {
-    if (index < 13)
+    int factorySize = static_cast<int>(factoryPresets.size());
+    if (index < factorySize)
     {
-        auto factoryPresets = getFactoryPresets();
-        if (index >= 0 && index < factoryPresets.size())
+        if (index >= 0 && index < factorySize)
         {
             return factoryPresets[index].name;
         }
@@ -229,7 +230,7 @@ const juce::String Prop5Processor::getProgramName(int index)
     }
     else
     {
-        int fileIdx = index - 13;
+        int fileIdx = index - factorySize;
         if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
         {
             return userPresetFiles[fileIdx].getFileNameWithoutExtension();

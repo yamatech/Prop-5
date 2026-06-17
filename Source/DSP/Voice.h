@@ -85,6 +85,7 @@ private:
     bool oscBTri = false;
     bool oscBLoMode = false;
     bool oscSync = false;
+    float lastPhaseB = 0.0f;
 
     float mixOscA = 0.75f;
     float mixOscB = 0.0f;

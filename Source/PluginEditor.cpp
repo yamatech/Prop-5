@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <algorithm>
 
 //==============================================================================
 Prop5Editor::Prop5Editor (Prop5Processor& p)
@@ -116,7 +117,8 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
                     int newIndex = audioProcessor.userPresetFiles.indexOf (file);
                     if (newIndex >= 0)
                     {
-                        int progIdx = 13 + newIndex;
+                        int factorySize = static_cast<int>(audioProcessor.factoryPresets.size());
+                        int progIdx = factorySize + newIndex;
                         audioProcessor.setCurrentProgram (progIdx);
                         presetCombo.setSelectedId (progIdx + 1, juce::dontSendNotification);
                     }
@@ -151,7 +153,8 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
                         int fileIndex = audioProcessor.userPresetFiles.indexOf (file);
                         if (fileIndex >= 0)
                         {
-                            int progIdx = 13 + fileIndex;
+                            int factorySize = static_cast<int>(audioProcessor.factoryPresets.size());
+                            int progIdx = factorySize + fileIndex;
                             audioProcessor.setCurrentProgram (progIdx);
                             presetCombo.setSelectedId (progIdx + 1, juce::dontSendNotification);
                         }
@@ -690,22 +693,77 @@ void Prop5Editor::timerCallback()
 
 void Prop5Editor::updatePresetComboBoxItems()
 {
-    presetCombo.clear();
+    presetCombo.clear (juce::dontSendNotification);
     
-    // Factory presets
-    for (int i = 0; i < 13; ++i)
+    int factorySize = static_cast<int>(audioProcessor.factoryPresets.size());
+    
+    // 1. ComboBoxの内部検索用リストへの追加（setSelectedId用）
+    for (int i = 0; i < factorySize; ++i)
     {
         presetCombo.addItem (audioProcessor.getProgramName (i), i + 1);
     }
     
-    // Separator
-    presetCombo.addSeparator();
-    
-    // User presets
     for (int i = 0; i < audioProcessor.userPresetFiles.size(); ++i)
     {
-        int progIndex = 13 + i;
+        int progIndex = factorySize + i;
         presetCombo.addItem (audioProcessor.getProgramName (progIndex), progIndex + 1);
+    }
+    
+    // 2. 表示用ポップアップメニューのカスタマイズ（サブメニュー化）
+    if (auto* rootMenu = presetCombo.getRootMenu())
+    {
+        rootMenu->clear();
+        
+        // カテゴリーごとのPopupMenuを格納する構造体
+        struct CategoryMenu
+        {
+            juce::String name;
+            juce::PopupMenu menu;
+        };
+        std::vector<CategoryMenu> categories;
+        
+        auto getOrCreateMenu = [&](const juce::String& name) -> juce::PopupMenu& {
+            for (auto& cat : categories)
+            {
+                if (cat.name == name)
+                    return cat.menu;
+            }
+            categories.push_back ({ name, juce::PopupMenu() });
+            return categories.back().menu;
+        };
+        
+        // ファクトリープリセットをカテゴリーごとに分類して追加
+        for (int i = 0; i < factorySize; ++i)
+        {
+            const auto& preset = audioProcessor.factoryPresets[i];
+            juce::String categoryName = preset.category.isNotEmpty() ? preset.category : "Others";
+            auto& catMenu = getOrCreateMenu (categoryName);
+            catMenu.addItem (i + 1, preset.name);
+        }
+        
+        // ルートメニューにファクトリープリセットのサブメニューを追加
+        std::sort (categories.begin(), categories.end(), [](const CategoryMenu& a, const CategoryMenu& b) {
+            return a.name < b.name;
+        });
+
+        for (auto& cat : categories)
+        {
+            rootMenu->addSubMenu (cat.name, cat.menu);
+        }
+        
+        // ユーザープリセットがある場合は「User Presets」サブメニューを追加
+        if (audioProcessor.userPresetFiles.size() > 0)
+        {
+            rootMenu->addSeparator();
+            
+            juce::PopupMenu userMenu;
+            for (int i = 0; i < audioProcessor.userPresetFiles.size(); ++i)
+            {
+                int progIndex = factorySize + i;
+                userMenu.addItem (progIndex + 1, audioProcessor.getProgramName (progIndex));
+            }
+            rootMenu->addSubMenu ("User Presets", userMenu);
+        }
     }
 }
 
