@@ -239,6 +239,25 @@ const juce::String Prop5Processor::getProgramName(int index)
     return "Empty User Patch";
 }
 
+bool Prop5Processor::isProgramActive (int index)
+{
+    int factorySize = static_cast<int> (factoryPresets.size());
+    if (index < factorySize)
+    {
+        if (index >= 0 && index < factorySize)
+        {
+            const auto& name = factoryPresets[index].name;
+            return name != "- Empty -" && name != "- Reserved -";
+        }
+        return false;
+    }
+    else
+    {
+        int fileIdx = index - factorySize;
+        return fileIdx >= 0 && fileIdx < userPresetFiles.size();
+    }
+}
+
 void Prop5Processor::changeProgramName(int index, const juce::String& newName)
 {
 }

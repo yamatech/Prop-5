@@ -1262,19 +1262,55 @@ inline std::vector<Preset> getFactoryPresets()
     initSync.parameters["mix_osc_b"] = 0.0f;
     presets.push_back(initSync);
 
-    // インデックスに基づいてカテゴリーを割り当て
-    for (size_t i = 0; i < presets.size(); ++i)
+    // 10スロット固定ルールに基づく再マッピング
+    std::vector<Preset> finalPresets(100);
+    Preset emptyPatch = initPatch;
+    emptyPatch.name = "- Empty -";
+    emptyPatch.category = "Reserved";
+
+    for (int i = 0; i < 100; ++i)
     {
-        if (i < 6)       presets[i].category = "1. Bass";
-        else if (i < 12) presets[i].category = "2. Lead";
-        else if (i < 18) presets[i].category = "3. Pad / Strings";
-        else if (i < 24) presets[i].category = "4. Brass";
-        else if (i < 30) presets[i].category = "5. Keyboards";
-        else if (i < 36) presets[i].category = "6. Guitar / Pluck";
-        else if (i < 42) presets[i].category = "7. Bell / Mallet";
-        else if (i < 47) presets[i].category = "8. SFX / Percussive";
-        else             presets[i].category = "9. Init Patches";
+        finalPresets[i] = emptyPatch;
     }
 
-    return presets;
+    int tempIdx = 0;
+    // Bass (6音色: 0-5)
+    for (int i = 0; i < 6; ++i) finalPresets[0 + i] = presets[tempIdx++];
+    // Lead (6音色: 10-15)
+    for (int i = 0; i < 6; ++i) finalPresets[10 + i] = presets[tempIdx++];
+    // Pad / Strings (6音色: 20-25)
+    for (int i = 0; i < 6; ++i) finalPresets[20 + i] = presets[tempIdx++];
+    // Brass (6音色: 30-35)
+    for (int i = 0; i < 6; ++i) finalPresets[30 + i] = presets[tempIdx++];
+    // Keyboards (6音色: 40-45)
+    for (int i = 0; i < 6; ++i) finalPresets[40 + i] = presets[tempIdx++];
+    // Guitar / Pluck (6音色: 50-55)
+    for (int i = 0; i < 6; ++i) finalPresets[50 + i] = presets[tempIdx++];
+    // Bell / Mallet (6音色: 60-65)
+    for (int i = 0; i < 6; ++i) finalPresets[60 + i] = presets[tempIdx++];
+    // SFX / Percussive (5音色: 70-74)
+    for (int i = 0; i < 5; ++i) finalPresets[70 + i] = presets[tempIdx++];
+    // Init Patches (4音色: 80-83)
+    for (int i = 0; i < 4; ++i) finalPresets[80 + i] = presets[tempIdx++];
+
+    // 正しいカテゴリーとReserved名の再設定
+    for (int i = 0; i < 100; ++i)
+    {
+        if (i < 10)       finalPresets[i].category = "1. Bass";
+        else if (i < 20) finalPresets[i].category = "2. Lead";
+        else if (i < 30) finalPresets[i].category = "3. Pad / Strings";
+        else if (i < 40) finalPresets[i].category = "4. Brass";
+        else if (i < 50) finalPresets[i].category = "5. Keyboards";
+        else if (i < 60) finalPresets[i].category = "6. Guitar / Pluck";
+        else if (i < 70) finalPresets[i].category = "7. Bell / Mallet";
+        else if (i < 80) finalPresets[i].category = "8. SFX / Percussive";
+        else if (i < 90) finalPresets[i].category = "9. Init Patches";
+        else             
+        {
+            finalPresets[i].category = "Reserved";
+            finalPresets[i].name = "- Reserved -";
+        }
+    }
+
+    return finalPresets;
 }

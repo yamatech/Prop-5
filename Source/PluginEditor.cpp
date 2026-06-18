@@ -53,8 +53,16 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     prevPresetButton.onClick = [this]
     {
         int activeProgram = audioProcessor.getCurrentProgram();
-        if (activeProgram > 0)
-            audioProcessor.setCurrentProgram (activeProgram - 1);
+        int newProgram = activeProgram;
+        while (newProgram > 0)
+        {
+            newProgram--;
+            if (audioProcessor.isProgramActive (newProgram))
+            {
+                audioProcessor.setCurrentProgram (newProgram);
+                break;
+            }
+        }
     };
 
     nextPresetButton.setButtonText (">");
@@ -62,8 +70,17 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     nextPresetButton.onClick = [this]
     {
         int activeProgram = audioProcessor.getCurrentProgram();
-        if (activeProgram < audioProcessor.getNumPrograms() - 1)
-            audioProcessor.setCurrentProgram (activeProgram + 1);
+        int newProgram = activeProgram;
+        int numProgs = audioProcessor.getNumPrograms();
+        while (newProgram < numProgs - 1)
+        {
+            newProgram++;
+            if (audioProcessor.isProgramActive (newProgram))
+            {
+                audioProcessor.setCurrentProgram (newProgram);
+                break;
+            }
+        }
     };
 
     initButton.setButtonText ("RESET");
@@ -700,7 +717,10 @@ void Prop5Editor::updatePresetComboBoxItems()
     // 1. ComboBoxの内部検索用リストへの追加（setSelectedId用）
     for (int i = 0; i < factorySize; ++i)
     {
-        presetCombo.addItem (audioProcessor.getProgramName (i), i + 1);
+        if (audioProcessor.isProgramActive (i))
+        {
+            presetCombo.addItem (audioProcessor.getProgramName (i), i + 1);
+        }
     }
     
     for (int i = 0; i < audioProcessor.userPresetFiles.size(); ++i)
@@ -735,10 +755,15 @@ void Prop5Editor::updatePresetComboBoxItems()
         // ファクトリープリセットをカテゴリーごとに分類して追加
         for (int i = 0; i < factorySize; ++i)
         {
-            const auto& preset = audioProcessor.factoryPresets[i];
-            juce::String categoryName = preset.category.isNotEmpty() ? preset.category : "Others";
-            auto& catMenu = getOrCreateMenu (categoryName);
-            catMenu.addItem (i + 1, preset.name);
+            if (audioProcessor.isProgramActive (i))
+            {
+                const auto& preset = audioProcessor.factoryPresets[i];
+                juce::String categoryName = preset.category.isNotEmpty() ? preset.category : "Others";
+                if (categoryName == "Reserved")
+                    continue;
+                auto& catMenu = getOrCreateMenu (categoryName);
+                catMenu.addItem (i + 1, preset.name);
+            }
         }
         
         // ルートメニューにファクトリープリセットのサブメニューを追加

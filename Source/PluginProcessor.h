@@ -33,6 +33,7 @@ public:
     void changeProgramName (int index, const juce::String& newName) override;
     
     void resetCurrentProgram();
+    bool isProgramActive (int index);
     
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
