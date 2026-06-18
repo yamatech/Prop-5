@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "PresetData.h"
+#include "DSP/Prop5Synthesiser.h"
 
 class Prop5Processor : public juce::AudioProcessor
 {
@@ -59,7 +60,7 @@ private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     // シンセサイザーのコアエンジン（ここに5ボイスを追加します）
-    juce::Synthesiser synth;
+    Prop5Synthesiser synth;
 
     int currentProgram { 0 };
 

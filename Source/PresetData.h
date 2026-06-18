@@ -219,6 +219,7 @@ inline std::vector<Preset> getFactoryPresets()
     // [7] Pro-Solo Lead (OSC Sync)
     Preset syncLead = initPatch;
     syncLead.name = "Pro-Solo Lead";
+    syncLead.parameters["unison"] = 1.0f;
     syncLead.parameters["osc_a_freq"] = 2.0f; // ユーザー調整: 2.0fに上げてフルートのような柔らかい高域リードへ
     syncLead.parameters["osc_a_saw"] = 1.0f;
     syncLead.parameters["osc_b_freq"] = 2.0f;
@@ -240,6 +241,7 @@ inline std::vector<Preset> getFactoryPresets()
     syncLead.parameters["env_b_dcy"] = 400.0f;
     syncLead.parameters["env_b_sus"] = 0.8f;
     syncLead.parameters["env_b_rel"] = 200.0f;
+    syncLead.parameters["velocity_to_filter"] = 0.16f;
     presets.push_back(syncLead);
 
     // [8] Polyphonic Lead
@@ -313,9 +315,10 @@ inline std::vector<Preset> getFactoryPresets()
     softLead.parameters["wheel_mod_dest_freq_a"] = 1.0f;
     presets.push_back(softLead);
 
-    // [11] Expressive Wave Lead
+    // [11] Classic Mono Lead
     Preset waveLead = initPatch;
-    waveLead.name = "Expressive Wave Lead";
+    waveLead.name = "Classic Mono Lead";
+    waveLead.parameters["unison"] = 1.0f;
     waveLead.parameters["osc_a_sqr"] = 1.0f;
     waveLead.parameters["osc_a_pw"] = 50.0f;
     waveLead.parameters["osc_b_saw"] = 1.0f;
@@ -337,7 +340,7 @@ inline std::vector<Preset> getFactoryPresets()
     waveLead.parameters["wheel_mod_dest_filter"] = 1.0f;
     waveLead.parameters["velocity_to_amp"] = 0.5f;
     waveLead.parameters["velocity_to_filter"] = 0.4f;
-    waveLead.parameters["glide"] = 50.0f;
+    waveLead.parameters["glide"] = 20.0f;
     presets.push_back(waveLead);
 
     // [12] Sync Hard Lead
@@ -587,10 +590,10 @@ inline std::vector<Preset> getFactoryPresets()
     mutedBrass.parameters["velocity_to_amp"] = 0.3f;
     presets.push_back(mutedBrass);
 
-    // [22] Uni Poly Brass
+    // [22] Fat Poly Brass
     Preset uniBrassPatch = initPatch;
-    uniBrassPatch.name = "Uni Poly Brass";
-    uniBrassPatch.parameters["unison"] = 1.0f;
+    uniBrassPatch.name = "Fat Poly Brass";
+    uniBrassPatch.parameters["unison"] = 0.0f;
     uniBrassPatch.parameters["osc_a_saw"] = 1.0f;
     uniBrassPatch.parameters["osc_b_freq"] = 1.0f;
     uniBrassPatch.parameters["osc_b_fine"] = 0.07f;
@@ -609,6 +612,8 @@ inline std::vector<Preset> getFactoryPresets()
     uniBrassPatch.parameters["env_b_dcy"] = 600.0f;
     uniBrassPatch.parameters["env_b_sus"] = 0.9f;
     uniBrassPatch.parameters["env_b_rel"] = 300.0f;
+    uniBrassPatch.parameters["poly_mod_osc_b_amt"] = 0.42f;
+    uniBrassPatch.parameters["poly_mod_dest_freq_a"] = 1.0f;
     presets.push_back(uniBrassPatch);
 
     // [23] Modern Hybrid Brass
@@ -827,7 +832,7 @@ inline std::vector<Preset> getFactoryPresets()
     acousticGit.parameters["osc_b_pw"] = 80.0f;
     acousticGit.parameters["mix_osc_a"] = 0.5f;
     acousticGit.parameters["mix_osc_b"] = 0.5f;
-    acousticGit.parameters["vcf_cutoff"] = 1200.0f;
+    acousticGit.parameters["vcf_cutoff"] = 1300.0f;
     acousticGit.parameters["vcf_reson"] = 0.15f;
     acousticGit.parameters["vcf_env_amt"] = 0.4f;
     acousticGit.parameters["env_a_atk"] = 5.0f;
@@ -903,7 +908,7 @@ inline std::vector<Preset> getFactoryPresets()
     pluckPad.parameters["env_a_dcy"] = 1000.0f;
     pluckPad.parameters["env_a_sus"] = 0.3f;
     pluckPad.parameters["env_a_rel"] = 1500.0f;
-    pluckPad.parameters["env_b_atk"] = 5.0f;
+    pluckPad.parameters["env_b_atk"] = 2.5f;
     pluckPad.parameters["env_b_dcy"] = 800.0f;
     pluckPad.parameters["env_b_sus"] = 0.8f;
     pluckPad.parameters["env_b_rel"] = 1200.0f;
@@ -936,12 +941,13 @@ inline std::vector<Preset> getFactoryPresets()
     // [36] Harp Pluck
     Preset harpPluck = initPatch;
     harpPluck.name = "Harp Pluck";
+    harpPluck.parameters["osc_sync"] = 1.0f;
     harpPluck.parameters["osc_a_sqr"] = 1.0f;
     harpPluck.parameters["osc_a_pw"] = 50.0f;
     harpPluck.parameters["osc_b_tri"] = 1.0f;
     harpPluck.parameters["mix_osc_a"] = 0.3f;
     harpPluck.parameters["mix_osc_b"] = 0.8f;
-    harpPluck.parameters["vcf_cutoff"] = 350.0f;
+    harpPluck.parameters["vcf_cutoff"] = 955.0f;
     harpPluck.parameters["vcf_reson"] = 0.1f;
     harpPluck.parameters["vcf_env_amt"] = 0.5f;
     harpPluck.parameters["env_a_atk"] = 1.0f;
@@ -949,9 +955,9 @@ inline std::vector<Preset> getFactoryPresets()
     harpPluck.parameters["env_a_sus"] = 0.0f;
     harpPluck.parameters["env_a_rel"] = 250.0f;
     harpPluck.parameters["env_b_atk"] = 1.0f;
-    harpPluck.parameters["env_b_dcy"] = 250.0f;
+    harpPluck.parameters["env_b_dcy"] = 510.0f;
     harpPluck.parameters["env_b_sus"] = 0.0f;
-    harpPluck.parameters["env_b_rel"] = 250.0f;
+    harpPluck.parameters["env_b_rel"] = 1000.0f;
     presets.push_back(harpPluck);
 
     // =========================================================================
@@ -982,7 +988,7 @@ inline std::vector<Preset> getFactoryPresets()
     crystalBell.parameters["env_b_rel"] = 1500.0f;
     crystalBell.parameters["poly_mod_env_amt"] = 0.0f;
     crystalBell.parameters["poly_mod_osc_b_amt"] = 0.65f; // 金属的なFM音を作るための深いモジュレーション
-    crystalBell.parameters["poly_mod_dest_freq_a"] = 1.0f;
+    crystalBell.parameters["poly_mod_dest_freq_a"] = 0.0f;
     crystalBell.parameters["poly_mod_dest_vcf"] = 1.0f;
     presets.push_back(crystalBell);
 
@@ -1110,6 +1116,7 @@ inline std::vector<Preset> getFactoryPresets()
     tubularBell.parameters["env_b_rel"] = 2000.0f;
     tubularBell.parameters["poly_mod_osc_b_amt"] = 0.55f;
     tubularBell.parameters["poly_mod_dest_freq_a"] = 1.0f;
+    tubularBell.parameters["poly_mod_dest_pw_a"] = 1.0f;
     tubularBell.parameters["poly_mod_dest_vcf"] = 1.0f;
     presets.push_back(tubularBell);
 

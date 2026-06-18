@@ -35,6 +35,7 @@ public:
 
     void prepare(double sampleRate, int samplesPerBlock, int numOutputChannels);
     void updateParameters(const juce::AudioProcessorValueTreeState& apvts);
+    void setUnisonParams(int index, int count) { unisonIndex = index; unisonCount = count; }
 
 private:
     double currentSampleRate = 44100.0;
@@ -94,6 +95,8 @@ private:
     float masterTune = 0.0f;
     int pitchBendRange = 2;
     bool unison = false;
+    int unisonIndex = -1;
+    int unisonCount = 1;
 
     // Filter params
     float baseCutoff = 20000.0f;

@@ -48,7 +48,6 @@ void Prop5Voice::updateParameters(const juce::AudioProcessorValueTreeState& apvt
     }
 
     pitchBendRange = static_cast<int>(apvts.getRawParameterValue("pitchbend_range")->load());
-    unison = apvts.getRawParameterValue("unison")->load() > 0.5f;
 
     mixOscA = apvts.getRawParameterValue("mix_osc_a")->load();
     mixOscB = apvts.getRawParameterValue("mix_osc_b")->load();
@@ -182,6 +181,16 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 
     float velPower = std::pow(currentVelocity, 1.5f);
 
+    // ユニゾン時のデチューンとパン
+    float detune = 0.0f;
+    float pan = 0.0f;
+    if (unisonIndex >= 0 && unisonCount > 1)
+    {
+        float detuneAmount = 0.10f; // 10 cents (半音の10%)
+        detune = (static_cast<float>(unisonIndex) / static_cast<float>(unisonCount - 1) * 2.0f - 1.0f) * detuneAmount;
+        pan = (static_cast<float>(unisonIndex) / static_cast<float>(unisonCount - 1) * 2.0f - 1.0f);
+    }
+
     // Precalculate glide factor for this block
     double factor = 1.0;
     if (glideTimeMs > 0.05f)
@@ -240,11 +249,7 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         // OSC B Frequency Calculation
         float pitchOffsetB = masterTune; // -1.0 to 1.0 semitones
         pitchOffsetB += (currentGlideNote - 60.0f); // Relative to C4 (MIDI 60)
-        
-        if (unison)
-        {
-            pitchOffsetB += (randomGen.nextFloat() * 2.0f - 1.0f) * 0.15f; // Unison detuning
-        }
+        pitchOffsetB += detune; // Unison detuning
         pitchOffsetB += currentPitchWheelOffset;
 
         // Wheel Mod
@@ -285,11 +290,7 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         // OSC A Frequency Calculation
         float pitchOffsetA = masterTune;
         pitchOffsetA += (currentGlideNote - 60.0f);
-        
-        if (unison)
-        {
-            pitchOffsetA += (randomGen.nextFloat() * 2.0f - 1.0f) * 0.15f;
-        }
+        pitchOffsetA += detune; // Unison detuning
         pitchOffsetA += currentPitchWheelOffset;
 
         // Wheel Mod
@@ -369,8 +370,20 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         float ampVelocityScale = 1.0f + velocityToAmp * ((0.05f + 0.95f * velPower) - 1.0f);
         float outputVal = filterVal * envBVal * masterVolume * 0.2f * ampVelocityScale;
 
-        outputBuffer.addSample(0, startSample + sample, outputVal);
-        outputBuffer.addSample(1, startSample + sample, outputVal);
+        if (unisonIndex >= 0)
+        {
+            outputVal *= 0.5f;
+            float angle = (pan + 1.0f) * juce::MathConstants<float>::pi / 4.0f;
+            float leftGain = std::cos(angle);
+            float rightGain = std::sin(angle);
+            outputBuffer.addSample(0, startSample + sample, outputVal * leftGain);
+            outputBuffer.addSample(1, startSample + sample, outputVal * rightGain);
+        }
+        else
+        {
+            outputBuffer.addSample(0, startSample + sample, outputVal);
+            outputBuffer.addSample(1, startSample + sample, outputVal);
+        }
     }
 
     // Check if envelope has finished

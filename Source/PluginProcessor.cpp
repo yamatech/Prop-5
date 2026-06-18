@@ -360,6 +360,13 @@ void Prop5Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     }
 
     // 各ボイスに対してAPVTSの最新パラメータを適用
+    bool unisonParam = apvts.getRawParameterValue("unison")->load() > 0.5f;
+    if (unisonParam != synth.isUnisonMode())
+    {
+        synth.setUnisonMode(unisonParam);
+        synth.clearNoteStack();
+    }
+
     for (int i = 0; i < synth.getNumVoices(); ++i)
     {
         if (auto* voice = dynamic_cast<Prop5Voice*>(synth.getVoice(i)))
