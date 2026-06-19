@@ -305,6 +305,9 @@ void Prop5Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    // MIDIキーボードの状態を更新し、バッファと同期する
+    keyboardState.processNextMidiBuffer (midiMessages, 0, buffer.getNumSamples(), true);
+
     // MIDIメッセージからピッチベンド、CC、およびプログラムチェンジの変更を検出して処理
     for (const auto metadata : midiMessages)
     {

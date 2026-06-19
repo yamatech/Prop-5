@@ -281,6 +281,8 @@ private:
     SettingsOverlay settingsOverlay;
     AboutOverlay aboutOverlay;
 
+    juce::MidiKeyboardComponent keyboardComponent;
+
     PropLookAndFeel lookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Prop5Editor)

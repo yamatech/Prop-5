@@ -8,18 +8,19 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
       settingsOverlay (p,
           [this] (double scale) {
               audioProcessor.setStoredWindowScale (scale);
-              setSize (juce::roundToInt (1200 * scale), juce::roundToInt (560 * scale));
+              setSize (juce::roundToInt (1200 * scale), juce::roundToInt (620 * scale));
               settingsOverlay.updateSizeComboSelection();
           },
           [this] {
               updatePresetComboBoxItems();
-          })
+          }),
+      keyboardComponent (p.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
     setLookAndFeel (&lookAndFeel);
 
-    // Set window size based on stored scale (default is 1.15x of 1200x560)
+    // Set window size based on stored scale (default is 1.15x of 1200x620)
     double initialScale = audioProcessor.getStoredWindowScale();
-    setSize (juce::roundToInt (1200 * initialScale), juce::roundToInt (560 * initialScale));
+    setSize (juce::roundToInt (1200 * initialScale), juce::roundToInt (620 * initialScale));
 
     // Helpers to setup common components
     auto setupSlider = [this] (juce::Slider& slider, juce::Label& label, const juce::String& name)
@@ -400,6 +401,18 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     // Dialog overlays
     addChildComponent (settingsOverlay);
     addChildComponent (aboutOverlay);
+
+    // --- Keyboard Setup ---
+    keyboardComponent.setAvailableRange (24, 108); // C0 (24) から C7 (108) までの 7オクターブ (85鍵)
+    keyboardComponent.setScrollButtonsVisible (false);
+    
+    // カラーカスタマイズ (Prophet-5のビンテージ感に合わせた配色)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour (0xffeae6df)); // 押鍵時の色 (ゴールド/オフホワイト)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, juce::Colour (0xffeae6df).withAlpha(0.3f)); // マウスオーバー時の色 (薄いゴールド)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour (0xfffaf8f5)); // 白鍵 (ビンテージホワイト)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour (0xff151517)); // 黒鍵 (マットブラック)
+    
+    addAndMakeVisible (keyboardComponent);
 }
 
 Prop5Editor::~Prop5Editor()
@@ -440,6 +453,10 @@ void Prop5Editor::paint (juce::Graphics& g)
         g.setColour (juce::Colour (0xff201005).withAlpha (alpha));
         g.fillRect (10, y, 1180, 1);
     }
+
+    // 鍵盤エリア全体の黒背景（左右の空きスペースを埋める）
+    g.setColour (juce::Colour (0xff0f0f11));
+    g.fillRect (0, 560, 1200, 60);
 
     // 3. 各セクションの枠線とタイトルの描画
     auto drawSection = [&g] (const juce::Rectangle<int>& area, const juce::String& name, const juce::Colour& titleColor)
@@ -580,8 +597,15 @@ void Prop5Editor::resized()
     aboutButton.setBounds (sRect (105, 530, 40, 18));
 
     // Overlays cover the whole screen
-    settingsOverlay.setBounds (sRect (0, 0, 1200, 560));
-    aboutOverlay.setBounds (sRect (0, 0, 1200, 560));
+    settingsOverlay.setBounds (sRect (0, 0, 1200, 620));
+    aboutOverlay.setBounds (sRect (0, 0, 1200, 620));
+
+    // --- Keyboard Placement ---
+    keyboardComponent.setBounds (sRect (120, 560, 960, 60));
+
+    // 7オクターブ（C0からC7、白鍵50枚）をぴったり収めるためにキー幅を自動調整
+    float keyWidth = keyboardComponent.getWidth() / 50.0f;
+    keyboardComponent.setKeyWidth (keyWidth);
 
     // --- WHEELS Placement ---
     pitchBendSlider.setBounds (sRect (25, 60, 25, 360));

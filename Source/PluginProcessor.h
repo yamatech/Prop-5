@@ -41,6 +41,9 @@ public:
     // APVTSへのアクセス用（Editor等から参照するため）
     juce::AudioProcessorValueTreeState apvts;
 
+    // MIDIキーボードの状態管理
+    juce::MidiKeyboardState keyboardState;
+
     // --- Preset Folder / Settings ---
     juce::File getCurrentPresetFolder();
     juce::File getDefaultPresetFolder();
