@@ -63,6 +63,13 @@ if (Test-Path $licensePath) {
     Copy-Item -Path $licensePath -Destination "$tempDir\"
 }
 
+# Copy manuals (docs)
+$docsDir = "$rootDir\docs"
+if (Test-Path $docsDir) {
+    Copy-Item -Path $docsDir -Destination "$tempDir\docs" -Recurse
+}
+
+
 # Generate README_Install.txt from template
 $templatePath = "$scriptDir\README_Install_template.txt"
 if (Test-Path $templatePath) {

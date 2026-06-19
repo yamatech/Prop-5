@@ -43,6 +43,10 @@ Source: "..\build\Prop-5_artefacts\{#Configuration}\VST3\Prop-5.vst3\*"; DestDir
 ; LICENSE
 Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 
+; docs
+Source: "..\docs\*"; DestDir: "{app}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+
 [Icons]
 Name: "{group}\Prop-5"; Filename: "{app}\Prop-5.exe"
 Name: "{group}\{cm:UninstallProgram,Prop-5}"; Filename: "{uninstallexe}"
