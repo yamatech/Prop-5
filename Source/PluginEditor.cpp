@@ -405,6 +405,8 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     // --- Keyboard Setup ---
     keyboardComponent.setAvailableRange (24, 108); // C0 (24) から C7 (108) までの 7オクターブ (85鍵)
     keyboardComponent.setScrollButtonsVisible (false);
+    keyboardComponent.setBlackNoteLengthProportion (0.6f); // 黒鍵の長さ比率 (60%)
+    keyboardComponent.setBlackNoteWidthProportion (0.6f);  // 黒鍵の幅比率 (60%)
     
     // カラーカスタマイズ (Prophet-5のビンテージ感に合わせた配色)
     keyboardComponent.setColour (juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour (0xffeae6df)); // 押鍵時の色 (ゴールド/オフホワイト)

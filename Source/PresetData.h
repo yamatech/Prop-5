@@ -242,6 +242,7 @@ inline std::vector<Preset> getFactoryPresets()
     syncLead.parameters["env_b_sus"] = 0.8f;
     syncLead.parameters["env_b_rel"] = 200.0f;
     syncLead.parameters["velocity_to_filter"] = 0.16f;
+    syncLead.parameters["vcf_kb_track"] = 1.0f; // Kb Track: HALF
     presets.push_back(syncLead);
 
     // [8] Polyphonic Lead
@@ -364,6 +365,7 @@ inline std::vector<Preset> getFactoryPresets()
     syncHard.parameters["env_b_rel"] = 300.0f;
     syncHard.parameters["poly_mod_env_amt"] = 0.4f;
     syncHard.parameters["poly_mod_dest_freq_a"] = 1.0f;
+    syncHard.parameters["unison"] = 1.0f; // UNISON: ON
     presets.push_back(syncHard);
 
     // =========================================================================
@@ -648,7 +650,7 @@ inline std::vector<Preset> getFactoryPresets()
     hornSolo.parameters["osc_b_fine"] = 0.03f;
     hornSolo.parameters["mix_osc_a"] = 0.6f;
     hornSolo.parameters["mix_osc_b"] = 0.5f;
-    hornSolo.parameters["vcf_cutoff"] = 450.0f;
+    hornSolo.parameters["vcf_cutoff"] = 300.0f; // Cutoff: 450 -> 300
     hornSolo.parameters["vcf_reson"] = 0.1f;
     hornSolo.parameters["vcf_env_amt"] = 0.5f;
     hornSolo.parameters["env_a_atk"] = 80.0f;
@@ -672,10 +674,10 @@ inline std::vector<Preset> getFactoryPresets()
     // [25] Classic E.Piano
     Preset analogEp = initPatch;
     analogEp.name = "Classic E.Piano";
-    analogEp.parameters["osc_a_saw"] = 0.0f;
+    analogEp.parameters["osc_a_saw"] = 1.0f;
     analogEp.parameters["osc_a_sqr"] = 1.0f;
     analogEp.parameters["osc_a_pw"] = 65.0f;
-    analogEp.parameters["osc_b_freq"] = 3.0f;
+    analogEp.parameters["osc_b_freq"] = 1.0f;
     analogEp.parameters["osc_b_tri"] = 1.0f;
     analogEp.parameters["osc_b_fine"] = 0.02f;
     analogEp.parameters["mix_osc_a"] = 0.7f;
@@ -683,19 +685,19 @@ inline std::vector<Preset> getFactoryPresets()
     analogEp.parameters["vcf_cutoff"] = 600.0f;
     analogEp.parameters["vcf_reson"] = 0.2f;
     analogEp.parameters["vcf_env_amt"] = 0.0f;
-    analogEp.parameters["vcf_kb_track"] = 1.0f; // HALF
+    analogEp.parameters["vcf_kb_track"] = 2.0f; // HALF -> FULL
     analogEp.parameters["env_a_atk"] = 1.0f;
     analogEp.parameters["env_a_dcy"] = 1.0f;
     analogEp.parameters["env_a_sus"] = 0.0f;
     analogEp.parameters["env_a_rel"] = 1.0f;
     analogEp.parameters["env_b_atk"] = 1.0f;
-    analogEp.parameters["env_b_dcy"] = 2200.0f;
+    analogEp.parameters["env_b_dcy"] = 1900.0f; // VCA Decay: 1500 -> 1900
     analogEp.parameters["env_b_sus"] = 0.0f;
-    analogEp.parameters["env_b_rel"] = 600.0f;
+    analogEp.parameters["env_b_rel"] = 430.0f; // VCA Release: 600 -> 430
     analogEp.parameters["poly_mod_osc_b_amt"] = 0.25f;
     analogEp.parameters["poly_mod_dest_freq_a"] = 1.0f;
     analogEp.parameters["velocity_to_amp"] = 0.5f;
-    analogEp.parameters["velocity_to_filter"] = 0.0f; // ベロシティによるフィルター変化を0に
+    analogEp.parameters["velocity_to_filter"] = 0.5f; // ベロシティによるフィルター変化を0.5に
     presets.push_back(analogEp);
 
     // [26] Drawbar Organ
@@ -1081,7 +1083,7 @@ inline std::vector<Preset> getFactoryPresets()
     marimba.parameters["osc_b_tri"] = 1.0f;
     marimba.parameters["mix_osc_a"] = 0.3f;
     marimba.parameters["mix_osc_b"] = 0.8f;
-    marimba.parameters["vcf_cutoff"] = 300.0f;
+    marimba.parameters["vcf_cutoff"] = 380.0f; // Cutoff: 300 -> 380
     marimba.parameters["vcf_reson"] = 0.05f;
     marimba.parameters["vcf_env_amt"] = 0.2f;
     marimba.parameters["vcf_kb_track"] = 1.0f;
@@ -1232,6 +1234,14 @@ inline std::vector<Preset> getFactoryPresets()
     initVoice.parameters["osc_b_sqr"] = 1.0f;
     initVoice.parameters["mix_osc_a"] = 0.6f;
     initVoice.parameters["mix_osc_b"] = 0.4f;
+    initVoice.parameters["env_a_atk"] = 1.0f;
+    initVoice.parameters["env_a_dcy"] = 1.0f;
+    initVoice.parameters["env_a_sus"] = 0.0f;
+    initVoice.parameters["env_a_rel"] = 1.0f;
+    initVoice.parameters["env_b_atk"] = 1.0f;
+    initVoice.parameters["env_b_dcy"] = 15000.0f;
+    initVoice.parameters["env_b_sus"] = 1.0f;
+    initVoice.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initVoice);
 
     // [49] Init Saw (OSC AのSaw波のみ)
@@ -1240,14 +1250,30 @@ inline std::vector<Preset> getFactoryPresets()
     initSaw.parameters["osc_a_saw"] = 1.0f;
     initSaw.parameters["osc_a_sqr"] = 0.0f;
     initSaw.parameters["mix_osc_a"] = 0.8f;
+    initSaw.parameters["env_a_atk"] = 1.0f;
+    initSaw.parameters["env_a_dcy"] = 1.0f;
+    initSaw.parameters["env_a_sus"] = 0.0f;
+    initSaw.parameters["env_a_rel"] = 1.0f;
+    initSaw.parameters["env_b_atk"] = 1.0f;
+    initSaw.parameters["env_b_dcy"] = 15000.0f;
+    initSaw.parameters["env_b_sus"] = 1.0f;
+    initSaw.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initSaw);
 
-    // [50] Init Square (OSC AのSquare波のみ)
+    // [50] Init Square (OSC A의 Square波のみ)
     Preset initSquare = initPatch;
     initSquare.name = "Init Square";
     initSquare.parameters["osc_a_saw"] = 0.0f;
     initSquare.parameters["osc_a_sqr"] = 1.0f;
     initSquare.parameters["mix_osc_a"] = 0.8f;
+    initSquare.parameters["env_a_atk"] = 1.0f;
+    initSquare.parameters["env_a_dcy"] = 1.0f;
+    initSquare.parameters["env_a_sus"] = 0.0f;
+    initSquare.parameters["env_a_rel"] = 1.0f;
+    initSquare.parameters["env_b_atk"] = 1.0f;
+    initSquare.parameters["env_b_dcy"] = 15000.0f;
+    initSquare.parameters["env_b_sus"] = 1.0f;
+    initSquare.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initSquare);
 
     // [51] Init Sync (OSC AのSyncをオン)
@@ -1260,6 +1286,14 @@ inline std::vector<Preset> getFactoryPresets()
     initSync.parameters["osc_b_saw"] = 1.0f;
     initSync.parameters["mix_osc_a"] = 0.8f;
     initSync.parameters["mix_osc_b"] = 0.0f;
+    initSync.parameters["env_a_atk"] = 1.0f;
+    initSync.parameters["env_a_dcy"] = 1.0f;
+    initSync.parameters["env_a_sus"] = 0.0f;
+    initSync.parameters["env_a_rel"] = 1.0f;
+    initSync.parameters["env_b_atk"] = 1.0f;
+    initSync.parameters["env_b_dcy"] = 15000.0f;
+    initSync.parameters["env_b_sus"] = 1.0f;
+    initSync.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initSync);
 
     // 10スロット固定ルールに基づく再マッピング
