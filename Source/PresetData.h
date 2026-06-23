@@ -1276,25 +1276,6 @@ inline std::vector<Preset> getFactoryPresets()
     initSquare.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initSquare);
 
-    // [51] Init Sync (OSC AのSyncをオン)
-    Preset initSync = initPatch;
-    initSync.name = "Init Sync";
-    initSync.parameters["osc_sync"] = 1.0f;
-    initSync.parameters["osc_a_saw"] = 1.0f;
-    initSync.parameters["osc_a_sqr"] = 0.0f;
-    initSync.parameters["osc_a_freq"] = 2.0f;
-    initSync.parameters["osc_b_saw"] = 1.0f;
-    initSync.parameters["mix_osc_a"] = 0.8f;
-    initSync.parameters["mix_osc_b"] = 0.0f;
-    initSync.parameters["env_a_atk"] = 1.0f;
-    initSync.parameters["env_a_dcy"] = 1.0f;
-    initSync.parameters["env_a_sus"] = 0.0f;
-    initSync.parameters["env_a_rel"] = 1.0f;
-    initSync.parameters["env_b_atk"] = 1.0f;
-    initSync.parameters["env_b_dcy"] = 15000.0f;
-    initSync.parameters["env_b_sus"] = 1.0f;
-    initSync.parameters["env_b_rel"] = 1.0f;
-    presets.push_back(initSync);
 
     // 10スロット固定ルールに基づく再マッピング
     std::vector<Preset> finalPresets(100);
@@ -1324,8 +1305,8 @@ inline std::vector<Preset> getFactoryPresets()
     for (int i = 0; i < 6; ++i) finalPresets[60 + i] = presets[tempIdx++];
     // SFX / Percussive (5音色: 70-74)
     for (int i = 0; i < 5; ++i) finalPresets[70 + i] = presets[tempIdx++];
-    // Init Patches (4音色: 80-83)
-    for (int i = 0; i < 4; ++i) finalPresets[80 + i] = presets[tempIdx++];
+    // Init Patches (3音色: 80-82)
+    for (int i = 0; i < 3; ++i) finalPresets[80 + i] = presets[tempIdx++];
 
     // 正しいカテゴリーとReserved名の再設定
     for (int i = 0; i < 100; ++i)
