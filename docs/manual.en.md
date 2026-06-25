@@ -1,5 +1,7 @@
 # Prop-5 User Manual
 
+*Note: This is a Markdown file. If you find the PDF version easier to read, please refer to the [docs_PDF](docs_PDF) folder.*
+
 Prop-5 is a polyphonic synthesizer audio plugin (VST3 / Standalone formats) developed using the JUCE framework, inspired by the classic analog synthesizer "Prophet-5".
 
 ---

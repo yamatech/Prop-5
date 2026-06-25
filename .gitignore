@@ -81,7 +81,6 @@ node_modules/
 
 # other
 .private/
-*.pdf
 
 # JUCE framework
 /JUCE/

@@ -1,5 +1,8 @@
 # README for macOS and Linux / macOS・Linuxユーザーの皆様へ
 
+※ この文書はマークダウンファイルです。PDFのほうが読みやすいという方は [README_PDF](README_PDF) フォルダをご覧ください。
+*Note: This is a Markdown file. If you find the PDF version easier to read, please refer to the [README_PDF](README_PDF) folder.*
+
 ## 日本語 (Japanese)
 
 ### macOSおよびLinux版の提供について

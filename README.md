@@ -1,6 +1,7 @@
 # Prop-5
 
 The English version of the README is here: [README.en.md](README.en.md)
+※ この文書はマークダウンファイルです。PDFのほうが読みやすいという方は [README_PDF](README_PDF) フォルダをご覧ください。
 
 ## 概要
 

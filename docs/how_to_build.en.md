@@ -1,5 +1,7 @@
 # Prop-5 Build Instructions (How to Build)
 
+*Note: This is a Markdown file. If you find the PDF version easier to read, please refer to the [docs_PDF](docs_PDF) folder.*
+
 This document is a guide for developers and users who wish to compile and build the Prop-5 source code themselves.
 
 > [!NOTE]

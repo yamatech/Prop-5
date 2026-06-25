@@ -1,6 +1,7 @@
 # Prop-5
 
 Japanese version of README is here: [README.md](README.md)
+*Note: This is a Markdown file. If you find the PDF version easier to read, please refer to the [README_PDF](README_PDF) folder.*
 
 ## Overview
 

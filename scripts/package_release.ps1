@@ -63,38 +63,36 @@ if (Test-Path $licensePath) {
     Copy-Item -Path $licensePath -Destination "$tempDir\"
 }
 
-# Copy manuals (PDFs)
-$manualDestDir = "$tempDir\manual"
-New-Item -ItemType Directory -Path $manualDestDir -Force | Out-Null
+# Copy docs directory (PDFs and Markdown files)
+$docsDestDir = "$tempDir\docs"
+New-Item -ItemType Directory -Path $docsDestDir -Force | Out-Null
 $docsDir = "$rootDir\docs"
 if (Test-Path $docsDir) {
-    if (Test-Path "$docsDir\manual.pdf") {
-        Copy-Item -Path "$docsDir\manual.pdf" -Destination $manualDestDir
-    }
-    if (Test-Path "$docsDir\manual.en.pdf") {
-        Copy-Item -Path "$docsDir\manual.en.pdf" -Destination $manualDestDir
-    }
-    if (Test-Path "$docsDir\how_to_build.pdf") {
-        Copy-Item -Path "$docsDir\how_to_build.pdf" -Destination $manualDestDir
-    }
-    if (Test-Path "$docsDir\how_to_build.en.pdf") {
-        Copy-Item -Path "$docsDir\how_to_build.en.pdf" -Destination $manualDestDir
-    }
+    # Copy PDF manual files
+    Get-ChildItem -Path $docsDir -Filter "*.pdf" | Copy-Item -Destination $docsDestDir
+    # Copy MD manual files
+    Get-ChildItem -Path $docsDir -Filter "*.md" | Copy-Item -Destination $docsDestDir
+} else {
+    Write-Warning "docs directory not found."
 }
 
+# Copy README files (Markdown and PDF versions)
+$readmeFiles = @(
+    "README.md",
+    "README.en.md",
+    "README_macOS_Linux.md",
+    "README.pdf",
+    "README.en.pdf",
+    "README_macOS_Linux.pdf"
+)
 
-# Copy README files
-$readmePath = "$rootDir\README.md"
-$readmeEnPath = "$rootDir\README.en.md"
-if (Test-Path $readmePath) {
-    Copy-Item -Path $readmePath -Destination "$tempDir\"
-} else {
-    Write-Warning "README.md not found."
-}
-if (Test-Path $readmeEnPath) {
-    Copy-Item -Path $readmeEnPath -Destination "$tempDir\"
-} else {
-    Write-Warning "README.en.md not found."
+foreach ($file in $readmeFiles) {
+    $filePath = "$rootDir\$file"
+    if (Test-Path $filePath) {
+        Copy-Item -Path $filePath -Destination "$tempDir\"
+    } else {
+        Write-Warning "$file not found."
+    }
 }
 
 # Create ZIP archive
