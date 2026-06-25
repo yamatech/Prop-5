@@ -83,15 +83,18 @@ if (Test-Path $docsDir) {
 }
 
 
-# Generate README_Install.txt from template
-$templatePath = "$scriptDir\README_Install_template.txt"
-if (Test-Path $templatePath) {
-    $readmeContent = Get-Content $templatePath -Raw -Encoding utf8
-    $readmeContent = $readmeContent.Replace("{VERSION}", $version)
-    # Write as UTF-8 with BOM to ensure proper encoding on Windows notepad
-    $readmeContent | Out-File -FilePath "$tempDir\README_Install.txt" -Encoding utf8
+# Copy README files
+$readmePath = "$rootDir\README.md"
+$readmeEnPath = "$rootDir\README.en.md"
+if (Test-Path $readmePath) {
+    Copy-Item -Path $readmePath -Destination "$tempDir\"
 } else {
-    Write-Warning "README_Install_template.txt not found. Packaging without it."
+    Write-Warning "README.md not found."
+}
+if (Test-Path $readmeEnPath) {
+    Copy-Item -Path $readmeEnPath -Destination "$tempDir\"
+} else {
+    Write-Warning "README.en.md not found."
 }
 
 # Create ZIP archive

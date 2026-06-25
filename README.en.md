@@ -31,90 +31,39 @@ Please note that this project partially utilizes AI-assisted coding (Gemini and 
 
 - `Prop-5.exe` is the Standalone version and does not require installation. You can place it anywhere and double-click to run it.
 
+### 4. User Manual
+
+For details on how to use Prop-5, explanations of each parameter, and how to save/load presets, please refer to the user manual:
+- [User Manual (docs/manual.en.md)](docs/manual.en.md)
+
+---
+
+## For macOS / Linux Users
+
+Currently, the official release packages are only available for Windows. If you want to use this plugin on macOS or Linux, or if you want to know about building from source, please refer to the following document:
+- [README for macOS and Linux](README_macOS_Linux.md)
+
 ---
 
 ## Source Code Build Instructions (For Developers)
 
-### Prerequisites
+If you would like to compile and build the source code of this repository yourself, please refer to the following detailed guide:
 
-To build this project, the following tools must be installed on your system in advance:
+- [Build Instructions (docs/how_to_build.en.md)](docs/how_to_build.en.md)
 
-- **C++17 Compatible Compiler**
-  - Windows: Visual Studio 2022 (with "Desktop development with C++" workload)
-  - macOS: Xcode 15 or higher (including Command Line Tools)
-  - Linux: Clang or GCC
-- **CMake** (version 3.22 or higher)
-
----
-
-## Setup Instructions
-
-This repository does not include the JUCE framework source code itself (it is excluded by `.gitignore`). Before building, you need to place JUCE in the root directory of the project.
-
-### 1. Clone the Repository
-
-First, clone this repository.
-
-```bash
-git clone https://github.com/yamatech/Prop-5 Prop-5
-cd Prop-5
-```
-
-### 2. Place JUCE
-
-Place the JUCE framework directly under the project root with the folder name `JUCE`.
-
-#### Method A: Get using Git (Recommended)
-
-Clone the official JUCE repository and check out the version verified to work with the project (e.g., `7.0.12`).
-
-```bash
-git clone https://github.com/juce-framework/JUCE.git JUCE
-cd JUCE
-git checkout tags/7.0.12
-cd ..
-```
-
-#### Method B: Download Manually
-
-1. Download the zip file from the [JUCE Official Website](https://juce.com/download/).
-2. Extract the file and place the `JUCE` folder directly in the root of this project.
-   (Make sure `Prop-5/JUCE/CMakeLists.txt` exists in this layout)
+### Overview
+1. Prepare a C++17 compatible compiler, CMake, and Git.
+2. Clone this repository and place the JUCE framework (v7.0.12) directly under the project root.
+3. Build the project using CMake.
 
 ---
 
-## How to Build
+## Our Philosophy
 
-Use CMake for building. Execute the following commands in the root directory of the project.
+This software is a non-commercial project developed by an amateur individual developer, and development resources are limited.
+In return, within the scope of the GNU GPLv3 license, we highly welcome users to freely fork, improve, and create/distribute derived versions (including builds for macOS, Linux, etc.).
 
-### 1. Create and Configure Build Directory
-
-```bash
-mkdir build
-cd build
-cmake ..
-```
-
-### 2. Run the Compilation
-
-To perform a release build, run the following command:
-
-```bash
-cmake --build . --config Release
-```
-
-*Note: For development debug builds, specify `--config Debug` instead.*
-
----
-
-## About Build Artifacts
-
-Upon a successful build, the plugin files for each format will be generated in the following directories:
-
-- **VST3 Plugin / Standalone App:**
-  - Generated inside `build/Prop-5_artefacts/Release/` (or `Debug/`).
-
-On Windows, if you want to automatically copy the plug-in to a specific folder (e.g., `C:\Program Files\Common Files\VST3`) after building, change `COPY_PLUGIN_AFTER_BUILD` to `TRUE` in [CMakeLists.txt](file:///W:/vsti-projects/Prop-5/CMakeLists.txt).
+We hope to see a world where individual developers can freely create, play, and enjoy their own synthesizers.
 
 ---
 
@@ -127,3 +76,13 @@ This project uses the JUCE framework under the terms of the JUCE GPLv3 license.
 
 - **Prophet-5** and **Sequential** are registered trademarks of **Sequential LLC**.
 - This software is an unofficial, independent fan-made clone/emulator and is **not affiliated with, endorsed by, sponsored by, or associated with Sequential LLC or its affiliates in any way.**
+
+---
+
+## Contact
+
+If you have any feedback, suggestions, or bug reports, please feel free to reach out to us at:
+
+- **Email:** yamatechmusic@gmail.com
+- **Developer Name:** yamatech
+

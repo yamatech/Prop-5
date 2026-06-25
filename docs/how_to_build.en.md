@@ -106,3 +106,12 @@ set(COPY_PLUGIN_AFTER_BUILD TRUE)
 * **Disclaimer & Trademarks:**
   * **Prophet-5** and **Sequential** are registered trademarks of **Sequential LLC**.
   * This software is an unofficial, independent fan-made clone/emulator and is **not affiliated with, endorsed by, sponsored by, or associated with Sequential LLC or its affiliates in any way.**
+
+---
+
+## 6. Contact
+
+If you have any feedback, suggestions, or bug reports, please feel free to reach out to us at:
+
+* **Email:** yamatechmusic@gmail.com
+* **Developer Name:** yamatech

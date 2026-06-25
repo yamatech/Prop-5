@@ -106,3 +106,12 @@ set(COPY_PLUGIN_AFTER_BUILD TRUE)
 * **商標について:**
   * **Prophet-5** および **Sequential** は **Sequential LLC** の登録商標です。
   * 本ソフトウェアは個人が開発した非公式のクローン（トリビュート・エミュレータ）であり、**Sequential LLC およびその関連会社とは一切関係がなく、公認、推奨、または支援を受けたものではありません。**
+
+---
+
+## 6. 連絡先 (Contact)
+
+ご意見・ご感想、バグレポートなどがありましたら、以下のメールアドレスまでご連絡ください。
+
+* **メールアドレス:** yamatechmusic@gmail.com
+* **開発者名:** yamatech
