@@ -63,10 +63,23 @@ if (Test-Path $licensePath) {
     Copy-Item -Path $licensePath -Destination "$tempDir\"
 }
 
-# Copy manuals (docs)
+# Copy manuals (PDFs)
+$manualDestDir = "$tempDir\manual"
+New-Item -ItemType Directory -Path $manualDestDir -Force | Out-Null
 $docsDir = "$rootDir\docs"
 if (Test-Path $docsDir) {
-    Copy-Item -Path $docsDir -Destination "$tempDir\docs" -Recurse
+    if (Test-Path "$docsDir\manual.pdf") {
+        Copy-Item -Path "$docsDir\manual.pdf" -Destination $manualDestDir
+    }
+    if (Test-Path "$docsDir\manual.en.pdf") {
+        Copy-Item -Path "$docsDir\manual.en.pdf" -Destination $manualDestDir
+    }
+    if (Test-Path "$docsDir\how_to_build.pdf") {
+        Copy-Item -Path "$docsDir\how_to_build.pdf" -Destination $manualDestDir
+    }
+    if (Test-Path "$docsDir\how_to_build.en.pdf") {
+        Copy-Item -Path "$docsDir\how_to_build.en.pdf" -Destination $manualDestDir
+    }
 }
 
 
