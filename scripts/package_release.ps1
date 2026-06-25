@@ -63,27 +63,19 @@ if (Test-Path $licensePath) {
     Copy-Item -Path $licensePath -Destination "$tempDir\"
 }
 
-# Copy docs directory (PDFs and Markdown files)
-$docsDestDir = "$tempDir\docs"
-New-Item -ItemType Directory -Path $docsDestDir -Force | Out-Null
+# Copy docs directory
 $docsDir = "$rootDir\docs"
 if (Test-Path $docsDir) {
-    # Copy PDF manual files
-    Get-ChildItem -Path $docsDir -Filter "*.pdf" | Copy-Item -Destination $docsDestDir
-    # Copy MD manual files
-    Get-ChildItem -Path $docsDir -Filter "*.md" | Copy-Item -Destination $docsDestDir
+    Copy-Item -Path $docsDir -Destination $tempDir -Recurse
 } else {
     Write-Warning "docs directory not found."
 }
 
-# Copy README files (Markdown and PDF versions)
+# Copy README files (Markdown versions)
 $readmeFiles = @(
     "README.md",
     "README.en.md",
-    "README_macOS_Linux.md",
-    "README.pdf",
-    "README.en.pdf",
-    "README_macOS_Linux.pdf"
+    "README_macOS_Linux.md"
 )
 
 foreach ($file in $readmeFiles) {
@@ -93,6 +85,14 @@ foreach ($file in $readmeFiles) {
     } else {
         Write-Warning "$file not found."
     }
+}
+
+# Copy README_PDF directory
+$readmePdfDir = "$rootDir\README_PDF"
+if (Test-Path $readmePdfDir) {
+    Copy-Item -Path $readmePdfDir -Destination $tempDir -Recurse
+} else {
+    Write-Warning "README_PDF directory not found."
 }
 
 # Create ZIP archive

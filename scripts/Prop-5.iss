@@ -44,10 +44,10 @@ Source: "..\build\Prop-5_artefacts\{#Configuration}\VST3\Prop-5.vst3\*"; DestDir
 Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 
 ; docs -> manual
-Source: "..\docs\manual.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
-Source: "..\docs\manual.en.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
-Source: "..\docs\how_to_build.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
-Source: "..\docs\how_to_build.en.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
+Source: "..\docs\docs_PDF\manual.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
+Source: "..\docs\docs_PDF\manual.en.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
+Source: "..\docs\docs_PDF\how_to_build.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
+Source: "..\docs\docs_PDF\how_to_build.en.pdf"; DestDir: "{app}\manual"; Flags: ignoreversion
 
 
 [Icons]
