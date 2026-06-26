@@ -74,8 +74,7 @@ if (Test-Path $docsDir) {
 # Copy README files (Markdown versions)
 $readmeFiles = @(
     "README.md",
-    "README.en.md",
-    "README_macOS_Linux.md"
+    "README.en.md"
 )
 
 foreach ($file in $readmeFiles) {
@@ -85,14 +84,6 @@ foreach ($file in $readmeFiles) {
     } else {
         Write-Warning "$file not found."
     }
-}
-
-# Copy README_PDF directory
-$readmePdfDir = "$rootDir\README_PDF"
-if (Test-Path $readmePdfDir) {
-    Copy-Item -Path $readmePdfDir -Destination $tempDir -Recurse
-} else {
-    Write-Warning "README_PDF directory not found."
 }
 
 # Create ZIP archive

@@ -1,7 +1,6 @@
 # Prop-5
 
 Japanese version of README is here: [README.md](README.md)
-*Note: This is a Markdown file. If you find the PDF version easier to read, please refer to the [README_PDF](README_PDF) folder.*
 
 ## Overview
 
@@ -41,18 +40,12 @@ For details on how to use Prop-5, explanations of each parameter, and how to sav
 
 ## For macOS / Linux Users
 
-Currently, the official release packages are only available for Windows. If you want to use this plugin on macOS or Linux, or if you want to know about building from source, please refer to the following document:
-- [README for macOS and Linux](README_macOS_Linux.md)
-
----
-
-## Source Code Build Instructions (For Developers)
-
-If you would like to compile and build the source code of this repository yourself, please refer to the following detailed guide:
+Currently, the official release packages are only available for Windows. If you wish to use this plugin on macOS or Linux, you will need to build it from the source code.
+Please refer to the following document for build instructions:
 
 - [Build Instructions (docs/how_to_build.en.md)](docs/how_to_build.en.md)
 
-### Overview
+### Overview (Tools Required for Building)
 1. Prepare a C++17 compatible compiler, CMake, and Git.
 2. Clone this repository and place the JUCE framework (v7.0.12) directly under the project root.
 3. Build the project using CMake.
