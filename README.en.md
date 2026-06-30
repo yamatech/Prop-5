@@ -5,9 +5,7 @@ Japanese version of README is here: [README.md](README.md)
 ## Overview
 
 Prop-5 is a synthesizer audio plugin (VST3 / Standalone formats) developed using the JUCE framework.  
-*Note: Currently in beta testing.*  
 This synthesizer was modeled after and inspired by the legendary analog synthesizer, Prophet-5.  
-We plan to build release packages in the future, and development is currently active.  
 Please note that this project partially utilizes AI-assisted coding (Gemini and Antigravity).
 
 ## Download and Installation Instructions (For End-Users)
