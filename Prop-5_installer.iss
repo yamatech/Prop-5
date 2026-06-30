@@ -4,7 +4,7 @@
 [Setup]
 ; アプリケーションの基本情報
 AppName=Prop-5
-AppVersion=0.9.9
+AppVersion=1.0.0
 AppPublisher=yamatech
 AppPublisherURL=https://github.com/yamatech/Prop-5
 AppSupportURL=https://github.com/yamatech/Prop-5
@@ -21,7 +21,7 @@ LicenseFile=LICENSE
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 OutputDir=installer_output
-OutputBaseFilename=Prop-5_v0.9.9_Setup
+OutputBaseFilename=Prop-5_v1.0.0_Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern

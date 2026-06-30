@@ -2,7 +2,7 @@
 ; Inno Setup configuration script for Prop-5
 
 #ifndef MyAppVersion
-  #define MyAppVersion "0.9.9"
+  #define MyAppVersion "1.0.0"
 #endif
 
 #ifndef Configuration
