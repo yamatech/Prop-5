@@ -12,19 +12,20 @@ Please note that this project partially utilizes AI-assisted coding (Gemini and 
 
 *Note: This package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
 
-### 1. Download and Run the Installer
+### 1. Download and Extract the Package
 
 1. Go to the [GitHub Releases page](https://github.com/yamatech/Prop-5/releases).
-2. Download `Prop-5_v[Version]_Setup.exe` from the "Assets" section of the latest release.
-3. Run the downloaded `Prop-5_v[Version]_Setup.exe`.
-4. Follow the on-screen instructions to complete the installation.
+2. Download `Prop-5_v[Version]_[Configuration]_Windows.zip` from the "Assets" section of the latest release.
+3. Extract (unzip) the downloaded ZIP file to a location of your choice.
 
-### 2. Installation Options
+### 2. Run the Installer and Select Installation Options
 
-During installation, you can choose from the following components:
-- **Full Installation**: Installs both the VST3 plugin and the Standalone application. (Recommended)
-- **Standalone Only**: Installs only the standalone application which can be run without a DAW.
-- **VST3 Only**: Installs only the plugin for use within a DAW (Cubase, Ableton Live, Studio One, Reaper, etc.).
+1. Run the `Prop-5_v[Version]_[Configuration]_Installer.exe` located inside the extracted folder.
+2. Follow the on-screen instructions to complete the installation.
+3. During installation, you can choose from the following components:
+   - **Full Installation**: Installs both the VST3 plugin and the Standalone application. (Recommended)
+   - **Standalone Only**: Installs only the standalone application which can be run without a DAW.
+   - **VST3 Only**: Installs only the plugin for use within a DAW (Cubase, Ableton Live, Studio One, Reaper, etc.).
 
 ### 3. Uninstallation
 
@@ -32,7 +33,8 @@ If you wish to uninstall Prop-5, go to Windows **Settings** > **Apps** > **Insta
 
 ### 4. User Manual
 
-For details on how to use Prop-5, explanations of each parameter, and how to save/load presets, please refer to the user manual:
+A copy of the documentation is included in this package. For details on how to use Prop-5, explanations of each parameter, and how to save/load presets, please open `docs/manual.en.md` (or the PDF version at `docs/docs_PDF/manual.en.pdf`) located inside the extracted folder.
+You can also view the manual on the repository page:
 - [User Manual (docs/manual.en.md)](docs/manual.en.md)
 
 ---
