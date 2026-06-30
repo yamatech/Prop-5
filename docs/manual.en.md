@@ -12,19 +12,26 @@ Prop-5 is a polyphonic synthesizer audio plugin (VST3 / Standalone formats) deve
 
 ---
 
-## 2. System Requirements & Installation
+## 2. System Requirements, Installation & Operation
 ### 2.1 System Requirements
 - **OS:** Windows 10 / 11 (64-bit)
 
-### 2.2 Installation Steps (VST3 Plugin)
-1. Copy the `Prop-5.vst3` folder from the release package.
-2. Paste the folder into the common VST3 directory below:
-   - **Path:** `C:\Program Files\Common Files\VST3\`
-   *(Note: Administrator privileges may be required.)*
-3. Restart or re-scan your DAW (Cubase, Ableton Live, Studio One, Reaper, etc.), and the plugin will be recognized automatically.
+### 2.2 Installation Steps
+1. Run the official installer (`Prop-5_v[Version]_Setup.exe`).
+2. Follow the on-screen instructions. You can choose which components to install:
+   - **Full Installation**: Installs both the VST3 plugin and the Standalone application. (Recommended)
+   - **Standalone Only**: Installs only the Standalone application.
+   - **VST3 Only**: Installs only the VST3 plugin.
+3. Once installation is complete, restart or re-scan your DAW (Cubase, Ableton Live, Studio One, Reaper, etc.), and the plugin will be recognized automatically.
 
-### 2.3 Running the Standalone Application
-- The included `Prop-5.exe` is a standalone version that does not require installation. Double-click to launch and play directly without a DAW. Configure your audio/MIDI device settings in the settings menu after launching.
+*Note: The VST3 plugin will be installed to `C:\Program Files\Common Files\VST3\Prop-5.vst3`, and the Standalone application will be installed to `C:\Program Files\Prop-5\`.*
+
+### 2.3 Running the Application
+- **VST3 Plugin**: Insert "Prop-5" from your DAW's plugin list.
+- **Standalone Application**: Launch "Prop-5" from the desktop shortcut or the Start menu. After launching, click the "SETTINGS" button at the bottom of the window to configure your audio/MIDI device settings.
+
+### 2.4 Uninstallation
+Go to Windows **Settings** > **Apps** > **Installed apps**, select **Prop-5**, and click **Uninstall**. The related files will be automatically removed.
 
 ---
 

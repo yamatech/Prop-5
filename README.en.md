@@ -12,24 +12,25 @@ Please note that this project partially utilizes AI-assisted coding (Gemini and 
 
 ## Download and Installation Instructions (For End-Users)
 
-*Note: This release package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
+*Note: This package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
 
-### 1. Download the Package
+### 1. Download and Run the Installer
 
 1. Go to the [GitHub Releases page](https://github.com/yamatech/Prop-5/releases).
-2. Download `Prop-5_v[Version]_Windows.zip` from the "Assets" section of the latest release.
-3. Extract the downloaded ZIP file to any directory.
+2. Download `Prop-5_v[Version]_Setup.exe` from the "Assets" section of the latest release.
+3. Run the downloaded `Prop-5_v[Version]_Setup.exe`.
+4. Follow the on-screen instructions to complete the installation.
 
-### 2. Install VST3 Plugin
+### 2. Installation Options
 
-1. Copy the `Prop-5.vst3` folder (the entire folder structure) from the extracted files into the following directory:
-   - **Destination Path:** `C:\Program Files\Common Files\VST3\`
-   *(Note: If the `VST3` folder does not exist, please create it. You may need Administrator privileges to perform this copy)*
-2. Restart your DAW (Cubase, Ableton Live, Studio One, Reaper, etc.) or trigger a plug-in rescan. The DAW will automatically detect the plugin.
+During installation, you can choose from the following components:
+- **Full Installation**: Installs both the VST3 plugin and the Standalone application. (Recommended)
+- **Standalone Only**: Installs only the standalone application which can be run without a DAW.
+- **VST3 Only**: Installs only the plugin for use within a DAW (Cubase, Ableton Live, Studio One, Reaper, etc.).
 
-### 3. Launch Standalone App
+### 3. Uninstallation
 
-- `Prop-5.exe` is the Standalone version and does not require installation. You can place it anywhere and double-click to run it.
+If you wish to uninstall Prop-5, go to Windows **Settings** > **Apps** > **Installed apps**, select **Prop-5**, and click **Uninstall**.
 
 ### 4. User Manual
 
