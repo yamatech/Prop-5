@@ -5,7 +5,7 @@
 This document is a guide for developers and users who wish to compile and build the Prop-5 source code themselves.
 
 > [!NOTE]
-> If you want to use the pre-built plug-ins (VST3) or the standalone app without compiling them yourself, please follow the installation instructions in `README_Install.txt` included in the package.
+> If you want to use the pre-built plug-ins (VST3) or the standalone app without compiling them yourself, please follow the "Download and Installation Instructions (For End-Users)" in [README.en.md](../README.en.md).
 
 ---
 
