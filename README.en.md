@@ -8,6 +8,8 @@ Prop-5 is a synthesizer audio plugin (VST3 / Standalone formats) developed using
 This synthesizer was modeled after and inspired by the legendary analog synthesizer, Prophet-5.  
 Please note that this project partially utilizes AI-assisted coding (Gemini and Antigravity).
 
+[![Prop-5 Demo Video](https://img.youtube.com/vi/1DPPKD5DUfk/0.jpg)](https://youtu.be/1DPPKD5DUfk)
+
 ## Download and Installation Instructions (For End-Users)
 
 *Note: This package is currently for **Windows only (64-bit)**. If you would like to use this plugin without building it yourself, please follow the steps below:*
