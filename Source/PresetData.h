@@ -14,7 +14,7 @@ inline std::vector<Preset> getFactoryPresets()
 {
     std::vector<Preset> presets;
 
-    // 基本となるベースパラメータ (Init Patch)
+    // Base parameters (Init Patch)
     Preset initPatch;
     initPatch.name = "Init Patch";
     initPatch.parameters = {
@@ -72,16 +72,16 @@ inline std::vector<Preset> getFactoryPresets()
     };
 
     // =========================================================================
-    // 1. Bass (6音色)
+    // 1. Bass (6 voices)
     // =========================================================================
 
     // [1] Classic Saw Bass
     Preset sawBass = initPatch;
     sawBass.name = "Classic Saw Bass";
-    sawBass.parameters["osc_a_freq"] = 0.5f; // オクターブ下
+    sawBass.parameters["osc_a_freq"] = 0.5f; // One octave down
     sawBass.parameters["osc_a_saw"] = 1.0f;
     sawBass.parameters["osc_b_freq"] = 0.5f;
-    sawBass.parameters["osc_b_fine"] = 0.08f; // デチューン
+    sawBass.parameters["osc_b_fine"] = 0.08f; // Detune
     sawBass.parameters["osc_b_saw"] = 1.0f;
     sawBass.parameters["mix_osc_a"] = 0.7f;
     sawBass.parameters["mix_osc_b"] = 0.7f;
@@ -109,7 +109,7 @@ inline std::vector<Preset> getFactoryPresets()
     resoBass.parameters["mix_osc_a"] = 0.7f;
     resoBass.parameters["mix_osc_b"] = 0.6f;
     resoBass.parameters["vcf_cutoff"] = 150.0f;
-    resoBass.parameters["vcf_reson"] = 0.75f; // レゾナンス高め
+    resoBass.parameters["vcf_reson"] = 0.75f; // Higher resonance
     resoBass.parameters["vcf_env_amt"] = 0.85f;
     resoBass.parameters["env_a_atk"] = 1.0f;
     resoBass.parameters["env_a_dcy"] = 120.0f;
@@ -124,7 +124,7 @@ inline std::vector<Preset> getFactoryPresets()
     // [3] Uni Square Bass
     Preset uniBass = initPatch;
     uniBass.name = "Uni Square Bass";
-    uniBass.parameters["unison"] = 1.0f; // ユニゾンON
+    uniBass.parameters["unison"] = 1.0f; // Unison ON
     uniBass.parameters["osc_a_freq"] = 0.5f;
     uniBass.parameters["osc_a_sqr"] = 1.0f;
     uniBass.parameters["osc_b_freq"] = 0.5f;
@@ -151,7 +151,7 @@ inline std::vector<Preset> getFactoryPresets()
     subBass.name = "Sub Double Bass";
     subBass.parameters["osc_a_freq"] = 0.5f;
     subBass.parameters["osc_a_saw"] = 1.0f;
-    subBass.parameters["osc_b_freq"] = 0.25f; // さらに1オクターブ下
+    subBass.parameters["osc_b_freq"] = 0.25f; // Further one octave down
     subBass.parameters["osc_b_sqr"] = 1.0f;
     subBass.parameters["mix_osc_a"] = 0.5f;
     subBass.parameters["mix_osc_b"] = 0.8f;
@@ -189,7 +189,7 @@ inline std::vector<Preset> getFactoryPresets()
     polyBass.parameters["env_b_dcy"] = 600.0f;
     polyBass.parameters["env_b_sus"] = 0.9f;
     polyBass.parameters["env_b_rel"] = 250.0f;
-    polyBass.parameters["wheel_mod_dest_filter"] = 1.0f; // ホイールでフィルター操作可能
+    polyBass.parameters["wheel_mod_dest_filter"] = 1.0f; // Filter can be controlled by mod wheel
     polyBass.parameters["velocity_to_filter"] = 0.4f;
     presets.push_back(polyBass);
 
@@ -213,20 +213,20 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(acidBass);
 
     // =========================================================================
-    // 2. Lead (6音色)
+    // 2. Lead (6 voices)
     // =========================================================================
 
     // [7] Pro-Solo Lead (OSC Sync)
     Preset syncLead = initPatch;
     syncLead.name = "Pro-Solo Lead";
     syncLead.parameters["unison"] = 1.0f;
-    syncLead.parameters["osc_a_freq"] = 2.0f; // ユーザー調整: 2.0fに上げてフルートのような柔らかい高域リードへ
+    syncLead.parameters["osc_a_freq"] = 2.0f; // User adjustment: Raised to 2.0f for a soft, flute-like high-range lead
     syncLead.parameters["osc_a_saw"] = 1.0f;
     syncLead.parameters["osc_b_freq"] = 2.0f;
     syncLead.parameters["osc_b_saw"] = 1.0f;
-    syncLead.parameters["osc_sync"] = 0.0f; // ユーザー調整: Syncを外すことで短いノイズを完全解消
+    syncLead.parameters["osc_sync"] = 0.0f; // User adjustment: Disabled sync to completely eliminate short noises
     syncLead.parameters["mix_osc_a"] = 0.8f;
-    syncLead.parameters["mix_osc_b"] = 0.0f; // 音量はゼロ
+    syncLead.parameters["mix_osc_b"] = 0.0f; // Volume is zero
     syncLead.parameters["mix_noise"] = 0.0f;
     syncLead.parameters["vcf_cutoff"] = 1200.0f;
     syncLead.parameters["vcf_reson"] = 0.0f;
@@ -237,7 +237,7 @@ inline std::vector<Preset> getFactoryPresets()
     syncLead.parameters["env_a_dcy"] = 600.0f;
     syncLead.parameters["env_a_sus"] = 0.2f;
     syncLead.parameters["env_a_rel"] = 200.0f;
-    syncLead.parameters["env_b_atk"] = 15.0f; // Syncノイズが解消したため、アタックを元の15msに戻して演奏レスポンスを改善
+    syncLead.parameters["env_b_atk"] = 15.0f; // Since the sync noise was resolved, returned attack to the original 15ms to improve play response
     syncLead.parameters["env_b_dcy"] = 400.0f;
     syncLead.parameters["env_b_sus"] = 0.8f;
     syncLead.parameters["env_b_rel"] = 200.0f;
@@ -282,7 +282,7 @@ inline std::vector<Preset> getFactoryPresets()
     feedbackLead.parameters["vcf_cutoff"] = 300.0f;
     feedbackLead.parameters["vcf_reson"] = 0.75f;
     feedbackLead.parameters["vcf_env_amt"] = 0.7f;
-    feedbackLead.parameters["poly_mod_osc_b_amt"] = 0.45f; // OSC BでOSC AとVCFを変調
+    feedbackLead.parameters["poly_mod_osc_b_amt"] = 0.45f; // Modulate OSC A and VCF with OSC B
     feedbackLead.parameters["poly_mod_dest_freq_a"] = 1.0f;
     feedbackLead.parameters["poly_mod_dest_vcf"] = 1.0f;
     feedbackLead.parameters["env_a_atk"] = 5.0f;
@@ -369,7 +369,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(syncHard);
 
     // =========================================================================
-    // 3. Pad / Strings (6音色)
+    // 3. Pad / Strings (6 voices)
     // =========================================================================
 
     // [13] Vintage Prophet Strings
@@ -475,7 +475,7 @@ inline std::vector<Preset> getFactoryPresets()
     dronePad.parameters["osc_b_tri"] = 1.0f;
     dronePad.parameters["mix_osc_a"] = 0.4f;
     dronePad.parameters["mix_osc_b"] = 0.5f;
-    dronePad.parameters["mix_noise"] = 0.2f; // ノイズ混入
+    dronePad.parameters["mix_noise"] = 0.2f; // Mix noise
     dronePad.parameters["vcf_cutoff"] = 250.0f;
     dronePad.parameters["vcf_reson"] = 0.3f;
     dronePad.parameters["vcf_env_amt"] = 0.3f;
@@ -519,7 +519,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(cineSweep);
 
     // =========================================================================
-    // 4. Brass (6音色)
+    // 4. Brass (6 voices)
     // =========================================================================
 
     // [19] Prophet Brass 5 (Famous "33 Brass" type)
@@ -668,7 +668,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(hornSolo);
 
     // =========================================================================
-    // 5. Keyboards (6音色)
+    // 5. Keyboards (6 voices)
     // =========================================================================
 
     // [25] Classic E.Piano
@@ -697,7 +697,7 @@ inline std::vector<Preset> getFactoryPresets()
     analogEp.parameters["poly_mod_osc_b_amt"] = 0.25f;
     analogEp.parameters["poly_mod_dest_freq_a"] = 1.0f;
     analogEp.parameters["velocity_to_amp"] = 0.5f;
-    analogEp.parameters["velocity_to_filter"] = 0.5f; // ベロシティによるフィルター変化を0.5に
+    analogEp.parameters["velocity_to_filter"] = 0.5f; // Set filter response to velocity to 0.5
     presets.push_back(analogEp);
 
     // [26] Drawbar Organ
@@ -706,7 +706,7 @@ inline std::vector<Preset> getFactoryPresets()
     organ.parameters["osc_a_saw"] = 0.0f;
     organ.parameters["osc_a_sqr"] = 1.0f;
     organ.parameters["osc_a_pw"] = 50.0f;
-    organ.parameters["osc_b_freq"] = 1.5f; // 3度上の倍音
+    organ.parameters["osc_b_freq"] = 1.5f; // Harmonic overtone a third above
     organ.parameters["osc_b_tri"] = 1.0f;
     organ.parameters["mix_osc_a"] = 0.7f;
     organ.parameters["mix_osc_b"] = 0.5f;
@@ -723,7 +723,7 @@ inline std::vector<Preset> getFactoryPresets()
     clav.name = "Prophet Clav";
     clav.parameters["osc_a_saw"] = 0.0f;
     clav.parameters["osc_a_sqr"] = 1.0f;
-    clav.parameters["osc_a_pw"] = 75.0f; // パルス幅を狭く
+    clav.parameters["osc_a_pw"] = 75.0f; // Narrow pulse width
     clav.parameters["osc_b_sqr"] = 1.0f;
     clav.parameters["osc_b_fine"] = 0.03f;
     clav.parameters["osc_b_pw"] = 75.0f;
@@ -765,7 +765,7 @@ inline std::vector<Preset> getFactoryPresets()
     spacedEp.parameters["env_b_dcy"] = 600.0f;
     spacedEp.parameters["env_b_sus"] = 0.0f;
     spacedEp.parameters["env_b_rel"] = 800.0f;
-    spacedEp.parameters["lfo_initial_amount"] = 0.06f; // うねり
+    spacedEp.parameters["lfo_initial_amount"] = 0.06f; // Modulation / swell
     spacedEp.parameters["wheel_mod_dest_freq_a"] = 1.0f;
     spacedEp.parameters["wheel_mod_dest_freq_b"] = 1.0f;
     presets.push_back(spacedEp);
@@ -775,8 +775,8 @@ inline std::vector<Preset> getFactoryPresets()
     harpsichord.name = "Analog Harpsichord";
     harpsichord.parameters["osc_a_saw"] = 0.0f;
     harpsichord.parameters["osc_a_sqr"] = 1.0f;
-    harpsichord.parameters["osc_a_pw"] = 90.0f; // 極細
-    harpsichord.parameters["osc_b_freq"] = 2.0f; // 1オクターブ上
+    harpsichord.parameters["osc_a_pw"] = 90.0f; // Extremely narrow
+    harpsichord.parameters["osc_b_freq"] = 2.0f; // One octave up
     harpsichord.parameters["osc_b_sqr"] = 1.0f;
     harpsichord.parameters["osc_b_fine"] = 0.02f;
     harpsichord.parameters["osc_b_pw"] = 90.0f;
@@ -821,7 +821,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(wurliEp);
 
     // =========================================================================
-    // 6. Guitar / Pluck (6音色)
+    // 6. Guitar / Pluck (6 voices)
     // =========================================================================
 
     // [31] Synthesized Acoustic
@@ -963,7 +963,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(harpPluck);
 
     // =========================================================================
-    // 7. Bell / Mallet (6音色)
+    // 7. Bell / Mallet (6 voices)
     // =========================================================================
 
     // [37] Crystal Bell (Metal FM)
@@ -972,10 +972,10 @@ inline std::vector<Preset> getFactoryPresets()
     crystalBell.parameters["osc_a_saw"] = 0.0f;
     crystalBell.parameters["osc_a_sqr"] = 1.0f;
     crystalBell.parameters["osc_a_pw"] = 50.0f;
-    crystalBell.parameters["osc_b_freq"] = 3.0f; // 1オクターブ+5度上
+    crystalBell.parameters["osc_b_freq"] = 3.0f; // One octave + a fifth above
     crystalBell.parameters["osc_b_tri"] = 1.0f;
     crystalBell.parameters["mix_osc_a"] = 0.7f;
-    crystalBell.parameters["mix_osc_b"] = 0.0f; // OSC B音量はカット（変調器として使用）
+    crystalBell.parameters["mix_osc_b"] = 0.0f; // OSC B volume is cut (used as modulator)
     crystalBell.parameters["vcf_cutoff"] = 800.0f;
     crystalBell.parameters["vcf_reson"] = 0.2f;
     crystalBell.parameters["vcf_env_amt"] = 0.6f;
@@ -989,7 +989,7 @@ inline std::vector<Preset> getFactoryPresets()
     crystalBell.parameters["env_b_sus"] = 0.0f;
     crystalBell.parameters["env_b_rel"] = 1500.0f;
     crystalBell.parameters["poly_mod_env_amt"] = 0.0f;
-    crystalBell.parameters["poly_mod_osc_b_amt"] = 0.65f; // 金属的なFM音を作るための深いモジュレーション
+    crystalBell.parameters["poly_mod_osc_b_amt"] = 0.65f; // Deep modulation to create metallic FM sound
     crystalBell.parameters["poly_mod_dest_freq_a"] = 0.0f;
     crystalBell.parameters["poly_mod_dest_vcf"] = 1.0f;
     presets.push_back(crystalBell);
@@ -997,7 +997,7 @@ inline std::vector<Preset> getFactoryPresets()
     // [38] Toy Glockenspiel
     Preset glockenspiel = initPatch;
     glockenspiel.name = "Toy Glockenspiel";
-    glockenspiel.parameters["osc_a_freq"] = 4.0f; // 高ピッチ
+    glockenspiel.parameters["osc_a_freq"] = 4.0f; // High pitch
     glockenspiel.parameters["osc_a_saw"] = 0.0f;
     glockenspiel.parameters["osc_a_sqr"] = 1.0f;
     glockenspiel.parameters["osc_a_pw"] = 50.0f;
@@ -1053,7 +1053,7 @@ inline std::vector<Preset> getFactoryPresets()
     spaceBell.parameters["osc_a_saw"] = 0.0f;
     spaceBell.parameters["osc_a_sqr"] = 1.0f;
     spaceBell.parameters["osc_a_pw"] = 50.0f;
-    spaceBell.parameters["osc_b_freq"] = 2.8f; // 不協和な倍音
+    spaceBell.parameters["osc_b_freq"] = 2.8f; // Inharmonic overtone
     spaceBell.parameters["osc_b_sqr"] = 1.0f;
     spaceBell.parameters["osc_b_pw"] = 50.0f;
     spaceBell.parameters["mix_osc_a"] = 0.6f;
@@ -1123,7 +1123,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(tubularBell);
 
     // =========================================================================
-    // 8. SFX / Percussive (5音色)
+    // 8. SFX / Percussive (5 voices)
     // =========================================================================
 
     // [43] Space Sci-Fi FX
@@ -1138,7 +1138,7 @@ inline std::vector<Preset> getFactoryPresets()
     sciFiFx.parameters["vcf_reson"] = 0.6f;
     sciFiFx.parameters["vcf_env_amt"] = 0.5f;
     sciFiFx.parameters["lfo_wave"] = 1.0f; // Square LFO
-    sciFiFx.parameters["lfo_rate"] = 12.0f; // 高速でピッチを変調
+    sciFiFx.parameters["lfo_rate"] = 12.0f; // Modulate pitch at high speed
     sciFiFx.parameters["lfo_initial_amount"] = 0.8f;
     sciFiFx.parameters["wheel_mod_dest_freq_a"] = 1.0f;
     presets.push_back(sciFiFx);
@@ -1148,7 +1148,7 @@ inline std::vector<Preset> getFactoryPresets()
     percussiveNoise.name = "Analog Snare / Hat";
     percussiveNoise.parameters["osc_a_saw"] = 0.0f;
     percussiveNoise.parameters["mix_osc_a"] = 0.0f;
-    percussiveNoise.parameters["mix_noise"] = 1.0f; // ノイズのみ
+    percussiveNoise.parameters["mix_noise"] = 1.0f; // Noise only
     percussiveNoise.parameters["vcf_cutoff"] = 1000.0f;
     percussiveNoise.parameters["vcf_reson"] = 0.0f;
     percussiveNoise.parameters["vcf_env_amt"] = 0.6f;
@@ -1180,7 +1180,7 @@ inline std::vector<Preset> getFactoryPresets()
     oceanFx.parameters["env_b_sus"] = 0.8f;
     oceanFx.parameters["env_b_rel"] = 3000.0f;
     oceanFx.parameters["lfo_wave"] = 0.0f;
-    oceanFx.parameters["lfo_rate"] = 0.15f; // 超低速で波の動き
+    oceanFx.parameters["lfo_rate"] = 0.15f; // Wave movement at extremely low speed
     oceanFx.parameters["lfo_initial_amount"] = 0.3f;
     oceanFx.parameters["wheel_mod_dest_filter"] = 1.0f;
     presets.push_back(oceanFx);
@@ -1197,7 +1197,7 @@ inline std::vector<Preset> getFactoryPresets()
     sweeperFx.parameters["env_b_dcy"] = 800.0f;
     sweeperFx.parameters["env_b_sus"] = 0.0f;
     sweeperFx.parameters["env_b_rel"] = 500.0f;
-    sweeperFx.parameters["poly_mod_env_amt"] = 0.7f; // ピッチへの極端な変調
+    sweeperFx.parameters["poly_mod_env_amt"] = 0.7f; // Extreme modulation to pitch
     sweeperFx.parameters["poly_mod_dest_freq_a"] = 1.0f;
     presets.push_back(sweeperFx);
 
@@ -1216,16 +1216,16 @@ inline std::vector<Preset> getFactoryPresets()
     computerFx.parameters["env_b_sus"] = 0.8f;
     computerFx.parameters["env_b_rel"] = 500.0f;
     computerFx.parameters["lfo_wave"] = 1.0f; // Square
-    computerFx.parameters["lfo_rate"] = 15.0f; // 高速ランダム調
+    computerFx.parameters["lfo_rate"] = 15.0f; // Fast random modulation
     computerFx.parameters["lfo_initial_amount"] = 0.3f;
     computerFx.parameters["wheel_mod_dest_freq_a"] = 1.0f;
     presets.push_back(computerFx);
 
     // =========================================================================
-    // 9. Init Patches (3音色)
+    // 9. Init Patches (3 voices)
     // =========================================================================
 
-    // [48] Init Voice (音作りの標準スタート。Saw+Square)
+    // [48] Init Voice (Standard start for sound creation. Saw+Square)
     Preset initVoice = initPatch;
     initVoice.name = "Init Voice";
     initVoice.parameters["osc_a_saw"] = 1.0f;
@@ -1244,7 +1244,7 @@ inline std::vector<Preset> getFactoryPresets()
     initVoice.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initVoice);
 
-    // [49] Init Saw (OSC AのSaw波のみ)
+    // [49] Init Saw (OSC A Saw wave only)
     Preset initSaw = initPatch;
     initSaw.name = "Init Saw";
     initSaw.parameters["osc_a_saw"] = 1.0f;
@@ -1260,7 +1260,7 @@ inline std::vector<Preset> getFactoryPresets()
     initSaw.parameters["env_b_rel"] = 1.0f;
     presets.push_back(initSaw);
 
-    // [50] Init Square (OSC A의 Square波のみ)
+    // [50] Init Square (OSC A Square wave only)
     Preset initSquare = initPatch;
     initSquare.name = "Init Square";
     initSquare.parameters["osc_a_saw"] = 0.0f;
@@ -1277,7 +1277,7 @@ inline std::vector<Preset> getFactoryPresets()
     presets.push_back(initSquare);
 
 
-    // 10スロット固定ルールに基づく再マッピング
+    // Remapping based on the fixed 10-slot rule
     std::vector<Preset> finalPresets(100);
     Preset emptyPatch = initPatch;
     emptyPatch.name = "- Empty -";
@@ -1289,26 +1289,26 @@ inline std::vector<Preset> getFactoryPresets()
     }
 
     int tempIdx = 0;
-    // Bass (6音色: 0-5)
+    // Bass (6 voices: 0-5)
     for (int i = 0; i < 6; ++i) finalPresets[0 + i] = presets[tempIdx++];
-    // Lead (6音色: 10-15)
+    // Lead (6 voices: 10-15)
     for (int i = 0; i < 6; ++i) finalPresets[10 + i] = presets[tempIdx++];
-    // Pad / Strings (6音色: 20-25)
+    // Pad / Strings (6 voices: 20-25)
     for (int i = 0; i < 6; ++i) finalPresets[20 + i] = presets[tempIdx++];
-    // Brass (6音色: 30-35)
+    // Brass (6 voices: 30-35)
     for (int i = 0; i < 6; ++i) finalPresets[30 + i] = presets[tempIdx++];
-    // Keyboards (6音色: 40-45)
+    // Keyboards (6 voices: 40-45)
     for (int i = 0; i < 6; ++i) finalPresets[40 + i] = presets[tempIdx++];
-    // Guitar / Pluck (6音色: 50-55)
+    // Guitar / Pluck (6 voices: 50-55)
     for (int i = 0; i < 6; ++i) finalPresets[50 + i] = presets[tempIdx++];
-    // Bell / Mallet (6音色: 60-65)
+    // Bell / Mallet (6 voices: 60-65)
     for (int i = 0; i < 6; ++i) finalPresets[60 + i] = presets[tempIdx++];
-    // SFX / Percussive (5音色: 70-74)
+    // SFX / Percussive (5 voices: 70-74)
     for (int i = 0; i < 5; ++i) finalPresets[70 + i] = presets[tempIdx++];
-    // Init Patches (3音色: 80-82)
+    // Init Patches (3 voices: 80-82)
     for (int i = 0; i < 3; ++i) finalPresets[80 + i] = presets[tempIdx++];
 
-    // 正しいカテゴリーとReserved名の再設定
+    // Reset correct category and Reserved name
     for (int i = 0; i < 100; ++i)
     {
         if (i < 10)       finalPresets[i].category = "1. Bass";
