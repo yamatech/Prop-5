@@ -7,13 +7,13 @@ public:
   Prop5LadderFilter();
   ~Prop5LadderFilter() = default;
 
-  // 初期化
+  // Initialization
   void prepare(double sampleRate);
 
-  // APVTSからのパラメータ設定
+  // Set parameters from APVTS
   void setParameters(float cutoffHz, float resonance, float envAmount, int kbTrackMode);
 
-  // 1サンプル処理。エンベロープの値とMIDIノートを受け取ってカットオフを動かします
+  // Processes one sample. Receives envelope value and MIDI note to modulate the cutoff frequency.
   float processSample(float inputSample, float envValue, float midiNote);
 
 private:

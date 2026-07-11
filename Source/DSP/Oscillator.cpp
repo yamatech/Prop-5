@@ -1,4 +1,4 @@
-﻿#include "Oscillator.h"
+#include "Oscillator.h"
 
 Prop5Oscillator::Prop5Oscillator() {}
 
@@ -20,7 +20,7 @@ void Prop5Oscillator::setFrequency(float freqInHz)
 
 void Prop5Oscillator::setPulseWidth(float pwPercentage)
 {
-  // 仕様書の 0〜100% を 0.0〜1.0 に正規化
+  // Normalize 0-100% to 0.0-1.0 from specifications
   pulseWidth = juce::jlimit(0.0f, 1.0f, pwPercentage / 100.0f);
 }
 
@@ -37,24 +37,24 @@ float Prop5Oscillator::processSample()
   float output = 0.0f;
   int activeWaveforms = 0;
 
-  // 1. ノコギリ波 (Sawtooth)
+  // 1. Sawtooth
   if (sawEnabled)
   {
-    // 0 〜 2π の位相を -1.0 〜 1.0 にマッピング
+    // Map the phase of 0 to 2pi to -1.0 to 1.0
     output += (phase / juce::MathConstants<float>::pi) - 1.0f;
     activeWaveforms++;
   }
 
-  // 2. 矩形波 (Square / Pulse)
+  // 2. Square / Pulse
   if (sqrEnabled)
   {
-    // 位相が Pulse Width の閾値以下なら 1.0、超えれば -1.0
+    // 1.0 if the phase is below the Pulse Width threshold, -1.0 otherwise
     float pwPhase = pulseWidth * juce::MathConstants<float>::twoPi;
     output += (phase < pwPhase) ? 1.0f : -1.0f;
     activeWaveforms++;
   }
 
-  // 3. 三角波 (Triangle) - OSC B用
+  // 3. Triangle - for OSC B
   if (triEnabled)
   {
     float tri = 0.0f;
@@ -67,13 +67,13 @@ float Prop5Oscillator::processSample()
     activeWaveforms++;
   }
 
-  // 複数波形がオンの場合は音量が割れないように平均化
+  // Average the output if multiple waveforms are active to prevent clipping
   if (activeWaveforms > 1)
   {
     output /= static_cast<float>(activeWaveforms);
   }
 
-  // 位相を進める
+  // Advance phase
   phase += phaseIncrement;
   if (phase >= juce::MathConstants<float>::twoPi)
   {

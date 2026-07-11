@@ -24,13 +24,13 @@ public:
     {
         if (unisonMode)
         {
-            // すでにスタックにあれば削除
+            // Remove from stack if already exists
             noteStack.erase(std::remove_if(noteStack.begin(), noteStack.end(),
                 [midiChannel, midiNoteNumber](const NoteInfo& n) {
                     return n.channel == midiChannel && n.noteNumber == midiNoteNumber;
                 }), noteStack.end());
 
-            // スタックに追加
+            // Add to stack
             noteStack.push_back({ midiChannel, midiNoteNumber, velocity });
 
             triggerUnisonNote(midiChannel, midiNoteNumber, velocity);
@@ -53,7 +53,7 @@ public:
     {
         if (unisonMode)
         {
-            // スタックから削除
+            // Remove from stack
             noteStack.erase(std::remove_if(noteStack.begin(), noteStack.end(),
                 [midiChannel, midiNoteNumber](const NoteInfo& n) {
                     return n.channel == midiChannel && n.noteNumber == midiNoteNumber;
@@ -61,7 +61,7 @@ public:
 
             if (noteStack.empty())
             {
-                // すべてのボイスを停止（リリース開始）
+                // Stop all voices (trigger release)
                 for (int i = 0; i < getNumVoices(); ++i)
                 {
                     if (auto* voice = getVoice(i))
@@ -75,7 +75,7 @@ public:
             }
             else
             {
-                // まだ鍵盤が押されていれば、最新のノートをトリガー
+                // Trigger the latest note if keys are still pressed
                 auto& lastNote = noteStack.back();
                 triggerUnisonNote(lastNote.channel, lastNote.noteNumber, lastNote.velocity);
             }
@@ -97,7 +97,7 @@ private:
 
     void triggerUnisonNote(int midiChannel, int midiNoteNumber, float velocity)
     {
-        // すべてのアクティブなボイスを即座に停止（テールオフなし）
+        // Immediately stop all active voices (no tail-off)
         for (int i = 0; i < getNumVoices(); ++i)
         {
             if (auto* voice = getVoice(i))

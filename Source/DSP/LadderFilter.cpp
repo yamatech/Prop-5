@@ -33,14 +33,14 @@ void Prop5LadderFilter::setParameters(float cutoffHz, float resonance, float env
 
 float Prop5LadderFilter::processSample(float inputSample, float envValue, float midiNote)
 {
-  // パラメータの計算
+  // Calculate parameters
   float envMod = envAmt * envValue * 8.0f;
   float kbMod = (midiNote - 60.0f) / 12.0f * kbTrack;
   float totalMod = envMod + kbMod;
   float currentCutoff = baseCutoff * std::pow(2.0f, totalMod);
   currentCutoff = juce::jlimit(20.0f, (float)currentSampleRate / 2.0f - 100.0f, currentCutoff);
 
-  // フィルターの設定
+  // Configure filter settings
   filter.setCutoffFrequencyHz(currentCutoff);
   filter.setResonance(res);
 

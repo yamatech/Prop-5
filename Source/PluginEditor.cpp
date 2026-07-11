@@ -108,7 +108,7 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 
     // SAVE button
     saveButton.setButtonText ("SAVE");
-    saveButton.setColour (juce::TextButton::buttonColourId, juce::Colour (0xffff2a1a)); // 実機風赤
+    saveButton.setColour (juce::TextButton::buttonColourId, juce::Colour (0xffff2a1a)); // Real hardware style red
     saveButton.setColour (juce::TextButton::textColourOffId, juce::Colours::white);
     addAndMakeVisible (saveButton);
     saveButton.onClick = [this]
@@ -146,7 +146,7 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
 
     // LOAD button
     loadButton.setButtonText ("LOAD");
-    loadButton.setColour (juce::TextButton::buttonColourId, juce::Colour (0xff1c75bc)); // バランスをとるための青系（SAVE赤との対比）
+    loadButton.setColour (juce::TextButton::buttonColourId, juce::Colour (0xff1c75bc)); // Blue style to balance (contrast with SAVE red)
     loadButton.setColour (juce::TextButton::textColourOffId, juce::Colours::white);
     addAndMakeVisible (loadButton);
     loadButton.onClick = [this]
@@ -403,16 +403,16 @@ Prop5Editor::Prop5Editor (Prop5Processor& p)
     addChildComponent (aboutOverlay);
 
     // --- Keyboard Setup ---
-    keyboardComponent.setAvailableRange (24, 108); // C0 (24) から C7 (108) までの 7オクターブ (85鍵)
+    keyboardComponent.setAvailableRange (24, 108); // 7 octaves (85 keys) from C0 (24) to C7 (108)
     keyboardComponent.setScrollButtonsVisible (false);
-    keyboardComponent.setBlackNoteLengthProportion (0.6f); // 黒鍵の長さ比率 (60%)
-    keyboardComponent.setBlackNoteWidthProportion (0.6f);  // 黒鍵の幅比率 (60%)
+    keyboardComponent.setBlackNoteLengthProportion (0.6f); // Black note length proportion (60%)
+    keyboardComponent.setBlackNoteWidthProportion (0.6f);  // Black note width proportion (60%)
     
-    // カラーカスタマイズ (Prophet-5のビンテージ感に合わせた配色)
-    keyboardComponent.setColour (juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour (0xffeae6df)); // 押鍵時の色 (ゴールド/オフホワイト)
-    keyboardComponent.setColour (juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, juce::Colour (0xffeae6df).withAlpha(0.3f)); // マウスオーバー時の色 (薄いゴールド)
-    keyboardComponent.setColour (juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour (0xfffaf8f5)); // 白鍵 (ビンテージホワイト)
-    keyboardComponent.setColour (juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour (0xff151517)); // 黒鍵 (マットブラック)
+    // Color customization (color scheme matched to Prophet-5 vintage feel)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::keyDownOverlayColourId, juce::Colour (0xffeae6df)); // Key down color (gold/off-white)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, juce::Colour (0xffeae6df).withAlpha(0.3f)); // Mouse over color (light gold)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour (0xfffaf8f5)); // White note (vintage white)
+    keyboardComponent.setColour (juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour (0xff151517)); // Black note (matte black)
     
     addAndMakeVisible (keyboardComponent);
 }
@@ -429,10 +429,10 @@ void Prop5Editor::paint (juce::Graphics& g)
     float scale = getWidth() / 1200.0f;
     g.addTransform (juce::AffineTransform::scale (scale));
 
-    // 1. 全体背景（フラットなダークグレー/ブラック）
+    // 1. Global background (flat dark gray/black)
     g.fillAll (juce::Colour (0xff0f0f11));
 
-    // 2. ウッドフレーム（左右・下部）
+    // 2. Wood frame (left, right, bottom)
     juce::ColourGradient leftWood (juce::Colour (0xff6a3b16), 0.0f, 0.0f,
                                    juce::Colour (0xff361c08), 10.0f, 0.0f, false);
     g.setGradientFill (leftWood);
@@ -448,7 +448,7 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setGradientFill (bottomWood);
     g.fillRect (0, 500, 1200, 60);
 
-    // 木目テクスチャの細い横線をシミュレート
+    // Simulate thin horizontal lines of woodgrain texture
     for (int y = 503; y < 557; y += 4)
     {
         float alpha = 0.03f + 0.04f * std::sin (y * 0.5f);
@@ -456,30 +456,30 @@ void Prop5Editor::paint (juce::Graphics& g)
         g.fillRect (10, y, 1180, 1);
     }
 
-    // 鍵盤エリア全体の黒背景（左右の空きスペースを埋める）
+    // Black background for the entire keyboard area (fill empty spaces on left and right)
     g.setColour (juce::Colour (0xff0f0f11));
     g.fillRect (0, 560, 1200, 60);
 
-    // 3. 各セクションの枠線とタイトルの描画
+    // 3. Draw border and title of each section
     auto drawSection = [&g] (const juce::Rectangle<int>& area, const juce::String& name, const juce::Colour& titleColor)
     {
-        float cornerSize = 4.0f; // 角丸の半径
+        float cornerSize = 4.0f; // Corner radius
 
-        // セクション背景（角丸のフラットな背景色で塗りつぶし）
+        // Section background (filled with flat rounded rectangle background color)
         g.setColour (juce::Colour (0xff0f0f11));
         g.fillRoundedRectangle (area.toFloat(), cornerSize);
 
-        // 細いオフホワイトの角丸枠線（太さ1.0f）
+        // Thin off-white rounded rectangle border (thickness 1.0f)
         g.setColour (juce::Colour (0xffd1d1d6));
         g.drawRoundedRectangle (area.toFloat(), cornerSize, 1.0f);
 
-        // タイトル（細身でフラットなフォント、太字ではなくPlain）
+        // Title (thin flat font, plain instead of bold)
         g.setFont (juce::Font (12.0f, juce::Font::plain));
         g.setColour (titleColor);
         g.drawText (name, area.getX() + 12, area.getY() + 8, area.getWidth() - 24, 18, juce::Justification::left);
     };
 
-    // Prophet-5の無機質なデザインに合わせ、セクションタイトル色はオフホワイトに統一
+    // Unify section title color to off-white to match Prophet-5's industrial design
     juce::Colour titleGold = juce::Colour (0xffeae6df);
     juce::Colour titleWhite = juce::Colour (0xffeae6df);
 
@@ -498,18 +498,18 @@ void Prop5Editor::paint (juce::Graphics& g)
     // COLUMN 3
     drawSection (juce::Rectangle<int> (650, 15, 265, 110), "OSC MIX", titleGold);
     
-    // FILTER (VCF) は内部に線を描く
+    // FILTER (VCF) draws internal lines
     juce::Rectangle<int> filterArea (650, 135, 265, 300);
     drawSection (filterArea, "FILTER", titleGold);
     
-    // VCF ENV 用の内部境界線（立体感をなくしたフラットなライン）
+    // Internal boundary line for VCF ENV (flat line eliminating 3D depth)
     g.setColour (juce::Colour (0xff3a3a40));
     g.drawHorizontalLine (filterArea.getY() + 105, filterArea.getX() + 5, filterArea.getRight() - 5);
     g.setFont (juce::Font (11.0f, juce::Font::plain));
     g.setColour (titleWhite.withAlpha (0.7f));
     g.drawText ("VCF ENV", filterArea.getX() + 12, filterArea.getY() + 110, filterArea.getWidth() - 24, 15, juce::Justification::left);
 
-    // Kb Track 用の内部境界線
+    // Internal boundary line for Kb Track
     g.drawHorizontalLine (filterArea.getY() + 205, filterArea.getX() + 5, filterArea.getRight() - 5);
 
     // COLUMN 4
@@ -521,10 +521,10 @@ void Prop5Editor::paint (juce::Graphics& g)
     // GLOBAL
     drawSection (juce::Rectangle<int> (925, 275, 265, 160), "GLOBAL", titleGold);
 
-    // PRESET BAR (白線の枠で囲む)
+    // PRESET BAR (surround with a white border)
     drawSection (juce::Rectangle<int> (260, 445, 680, 45), "", titleWhite);
 
-    // --- 左下の情報表示（木目パネルの上に描画） ---
+    // --- Bottom-left information display (drawn on the wood panel) ---
     g.setColour (juce::Colour (0xffeae6df).withAlpha (0.5f));
     g.setFont (juce::Font ("Arial", 9.0f, juce::Font::plain));
     g.drawText ("POLYPHONIC SYNTHESIZER", 25, 512, 160, 15, juce::Justification::left);
@@ -533,44 +533,44 @@ void Prop5Editor::paint (juce::Graphics& g)
     g.setFont (juce::Font ("Arial", 10.0f, juce::Font::plain));
     g.drawText ("VERSION " + juce::String (ProjectInfo::versionString), 25, 532, 160, 15, juce::Justification::left);
 
-    // --- 右下のシルバーエンブレムプレート（ロゴ） ---
+    // --- Bottom-right silver emblem plate (logo) ---
     juce::Rectangle<float> plateArea (1030.0f, 510.0f, 145.0f, 40.0f);
     float plateCornerSize = 4.0f;
 
-    // 1. プレートの凹み影（木目に埋め込まれた立体感を表現）
+    // 1. Plate indent shadow (representing 3D depth embedded in wood)
     g.setColour (juce::Colour (0xffaa6633).withAlpha (0.4f));
     g.fillRoundedRectangle (plateArea.translated (0.0f, 1.0f), plateCornerSize);
     g.setColour (juce::Colour (0xff150b05));
     g.drawRoundedRectangle (plateArea.translated (-0.5f, -0.5f), plateCornerSize, 1.0f);
 
-    // 2. メタリックシルバー背景グラデーション
+    // 2. Metallic silver background gradient
     juce::ColourGradient metalGradient (
         juce::Colour (0xfff2f2f4), plateArea.getX(), plateArea.getY(),
         juce::Colour (0xffbcbcc0), plateArea.getRight(), plateArea.getBottom(), false);
     g.setGradientFill (metalGradient);
     g.fillRoundedRectangle (plateArea, plateCornerSize);
 
-    // 3. プレートの内枠線と立体感（ベベル効果）
+    // 3. Inner border and 3D depth of the plate (bevel effect)
     g.setColour (juce::Colour (0xffffffff).withAlpha (0.7f));
     g.drawRoundedRectangle (plateArea, plateCornerSize, 0.5f);
     g.setColour (juce::Colour (0xff8c8c90));
     g.drawRoundedRectangle (plateArea.translated (0.5f, 0.5f), plateCornerSize, 0.5f);
 
-    // 暗いグレーの境界線
+    // Dark gray border line
     g.setColour (juce::Colour (0xff4a4a4e));
     g.drawRoundedRectangle (plateArea, plateCornerSize, 1.0f);
 
-    // 4. ロゴテキスト "Prop-5" の描画
-    // フォントは Arial Black または Arial Bold を横に引き伸ばす
+    // 4. Draw logo text "Prop-5"
+    // Stretch font horizontally (Arial Black or Arial Bold)
     juce::Font logoFont (juce::Font::getDefaultSerifFontName(), 24.0f, juce::Font::bold);
-    logoFont.setHorizontalScale (1.30f); // 横長にして Eurostile 風にする
+    logoFont.setHorizontalScale (1.30f); // Make it horizontal, Eurostile style
     g.setFont (logoFont);
 
-    // 立体感を出すためのシャドウ
+    // Shadow to create 3D depth
     g.setColour (juce::Colour (0xffffffff).withAlpha (0.7f));
     g.drawText ("Prop-5", plateArea.translated (0.5f, 1.0f), juce::Justification::centred);
 
-    // メインテキスト
+    // Main text
     g.setColour (juce::Colour (0xff1f1f23));
     g.drawText ("Prop-5", plateArea, juce::Justification::centred);
 }
@@ -605,7 +605,7 @@ void Prop5Editor::resized()
     // --- Keyboard Placement ---
     keyboardComponent.setBounds (sRect (120, 560, 960, 60));
 
-    // 7オクターブ（C0からC7、白鍵50枚）をぴったり収めるためにキー幅を自動調整
+    // Auto-adjust key width to perfectly fit 7 octaves (C0 to C7, 50 white keys)
     float keyWidth = keyboardComponent.getWidth() / 50.0f;
     keyboardComponent.setKeyWidth (keyWidth);
 
@@ -643,11 +643,11 @@ void Prop5Editor::resized()
 
     // --- OSC A Placement ---
     int oscAX = 375, oscAY = 15;
-    // 上段：左列に Sync ボタンを配置し、中列・右列に Freq A と Pw A ノブを配置
+    // Upper row: place Sync button in left column, Freq A and Pw A knobs in middle/right columns
     oscSyncButton.setBounds (sRect (oscAX + 20, oscAY + 68, 60, 40));
     oscAFreqSlider.setBounds (sRect (oscAX + 95, oscAY + 55, 65, 65));
     oscAPwSlider.setBounds (sRect (oscAX + 175, oscAY + 55, 65, 65));
-    // 下段：中列・右列に波形選択ボタン（Saw, Square）を配置（Sync との混同を防ぐ）
+    // Lower row: place waveform buttons (Saw, Square) in middle/right columns (to avoid confusion with Sync)
     oscASawButton.setBounds (sRect (oscAX + 97, oscAY + 138, 60, 40));
     oscASqrButton.setBounds (sRect (oscAX + 177, oscAY + 138, 60, 40));
 
@@ -740,7 +740,7 @@ void Prop5Editor::updatePresetComboBoxItems()
     
     int factorySize = static_cast<int>(audioProcessor.factoryPresets.size());
     
-    // 1. ComboBoxの内部検索用リストへの追加（setSelectedId用）
+    // 1. Add to ComboBox internal search list (for setSelectedId)
     for (int i = 0; i < factorySize; ++i)
     {
         if (audioProcessor.isProgramActive (i))
@@ -755,12 +755,12 @@ void Prop5Editor::updatePresetComboBoxItems()
         presetCombo.addItem (audioProcessor.getProgramName (progIndex), progIndex + 1);
     }
     
-    // 2. 表示用ポップアップメニューのカスタマイズ（サブメニュー化）
+    // 2. Customize pop-up menu for display (sub-categorization)
     if (auto* rootMenu = presetCombo.getRootMenu())
     {
         rootMenu->clear();
         
-        // カテゴリーごとのPopupMenuを格納する構造体
+        // Struct to store PopupMenu for each category
         struct CategoryMenu
         {
             juce::String name;
@@ -778,7 +778,7 @@ void Prop5Editor::updatePresetComboBoxItems()
             return categories.back().menu;
         };
         
-        // ファクトリープリセットをカテゴリーごとに分類して追加
+        // Categorize and add factory presets
         for (int i = 0; i < factorySize; ++i)
         {
             if (audioProcessor.isProgramActive (i))
@@ -792,7 +792,7 @@ void Prop5Editor::updatePresetComboBoxItems()
             }
         }
         
-        // ルートメニューにファクトリープリセットのサブメニューを追加
+        // Add factory preset submenu to root menu
         std::sort (categories.begin(), categories.end(), [](const CategoryMenu& a, const CategoryMenu& b) {
             return a.name < b.name;
         });
@@ -802,7 +802,7 @@ void Prop5Editor::updatePresetComboBoxItems()
             rootMenu->addSubMenu (cat.name, cat.menu);
         }
         
-        // ユーザープリセットがある場合は「User Presets」サブメニューを追加
+        // Add "User Presets" submenu if user presets exist
         if (audioProcessor.userPresetFiles.size() > 0)
         {
             rootMenu->addSeparator();
@@ -822,19 +822,19 @@ void Prop5Editor::updatePresetComboBoxItems()
 SettingsOverlay::SettingsOverlay (Prop5Processor& p, std::function<void(double)> onScaleChanged, std::function<void()> onFolderChanged)
     : processor (p), scaleCallback (onScaleChanged), folderCallback (onFolderChanged)
 {
-    // 閉じるボタン
+    // Close button
     closeButton.setButtonText ("X");
     closeButton.onClick = [this] { setVisible (false); };
     addAndMakeVisible (closeButton);
 
-    // タイトル
+    // Title
     titleLabel.setText ("SETTINGS", juce::dontSendNotification);
     titleLabel.setFont (juce::Font (18.0f, juce::Font::bold));
     titleLabel.setJustificationType (juce::Justification::left);
     titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df));
     addAndMakeVisible (titleLabel);
 
-    // Preset Folder 項目
+    // Preset Folder item
     folderSectionLabel.setText ("Preset Folder:", juce::dontSendNotification);
     folderSectionLabel.setFont (juce::Font (13.0f, juce::Font::bold));
     folderSectionLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.8f));
@@ -855,7 +855,7 @@ SettingsOverlay::SettingsOverlay (Prop5Processor& p, std::function<void(double)>
     defaultFolderButton.onClick = [this] { resetToDefaultFolder(); };
     addAndMakeVisible (defaultFolderButton);
 
-    // Window size 項目
+    // Window size item
     sizeSectionLabel.setText ("Window Size:", juce::dontSendNotification);
     sizeSectionLabel.setFont (juce::Font (13.0f, juce::Font::bold));
     sizeSectionLabel.setColour (juce::Label::textColourId, juce::Colour (0xffeae6df).withAlpha (0.8f));

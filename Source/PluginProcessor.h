@@ -38,10 +38,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    // APVTSへのアクセス用（Editor等から参照するため）
+    // For accessing APVTS (to reference from Editor, etc.)
     juce::AudioProcessorValueTreeState apvts;
 
-    // MIDIキーボードの状態管理
+    // Managing the state of the MIDI keyboard
     juce::MidiKeyboardState keyboardState;
 
     // --- Preset Folder / Settings ---
@@ -60,10 +60,10 @@ public:
     void setStoredWindowScale (double newScale);
 
 private:
-    // APVTSのパラメーターを生成・登録する関数
+    // Function to generate and register APVTS parameters
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
-    // シンセサイザーのコアエンジン（ここに5ボイスを追加します）
+    // Synthesizer core engine (adds 5 voices here)
     Prop5Synthesiser synth;
 
     int currentProgram { 0 };
@@ -72,7 +72,7 @@ private:
     void saveCurrentStateToMemory();
     void loadStateFromMemory (int index);
 
-    // グローバル設定管理
+    // Global settings management
     std::unique_ptr<juce::PropertiesFile> properties;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Prop5Processor)

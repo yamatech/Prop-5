@@ -158,7 +158,7 @@ void Prop5Voice::stopNote(float velocity, bool allowTailOff)
     }
     else
     {
-        // 即座に消音
+        // Silence immediately
         clearCurrentNote();
         currentMidiNote = -1;
     }
@@ -181,12 +181,12 @@ void Prop5Voice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 
     float velPower = std::pow(currentVelocity, 1.5f);
 
-    // ユニゾン時のデチューンとパン
+    // Detune and pan for unison mode
     float detune = 0.0f;
     float pan = 0.0f;
     if (unisonIndex >= 0 && unisonCount > 1)
     {
-        float detuneAmount = 0.10f; // 10 cents (半音の10%)
+        float detuneAmount = 0.10f; // 10 cents (10% of a semitone)
         detune = (static_cast<float>(unisonIndex) / static_cast<float>(unisonCount - 1) * 2.0f - 1.0f) * detuneAmount;
         pan = (static_cast<float>(unisonIndex) / static_cast<float>(unisonCount - 1) * 2.0f - 1.0f);
     }

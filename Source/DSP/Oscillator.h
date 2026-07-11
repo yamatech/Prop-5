@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <JuceHeader.h>
 
 class Prop5Oscillator
@@ -7,26 +7,26 @@ public:
     Prop5Oscillator();
     ~Prop5Oscillator() = default;
 
-    // 初期化（サンプルレートの設定）
+    // Initialization (set sample rate)
     void prepare(double sampleRate);
 
-    // パラメーターの設定
+    // Set parameters
     void setFrequency(float freqInHz);
-    void setPulseWidth(float pwPercentage); // 0.0 〜 100.0
+    void setPulseWidth(float pwPercentage); // 0.0 to 100.0
 
-    // 波形スイッチのオン/オフ
+    // Waveform switch on/off
     void setSawEnabled(bool enabled)     { sawEnabled = enabled; }
     void setSquareEnabled(bool enabled)  { sqrEnabled = enabled; }
-    void setTriangleEnabled(bool enabled){ triEnabled = enabled; } // OSC B用
+    void setTriangleEnabled(bool enabled){ triEnabled = enabled; } // For OSC B
 
-    // OSC SYNC（ハードシンク）用：外部から位相を強制リセットする
+    // For OSC SYNC (hard sync): Forcefully resets the phase externally
     void resetPhase() { phase = 0.0f; }
     float getPhase() const { return phase; }
 
-    // 1サンプル分の波形を生成して返す
+    // Generates and returns one sample of the waveform
     float processSample();
 
-    // 部（Voiceクラス）から最新の出力値を覗き見るための関数
+    // Function to inspect the latest output value from the Voice class
     float getSample() const { return lastSample; }
 
 private:
@@ -34,25 +34,25 @@ private:
     float frequency = 440.0f;
     float phase = 0.0f;
     float phaseIncrement = 0.0f;
-    float pulseWidth = 0.5f; // 0.0 〜 1.0に正規化して保持
+    float pulseWidth = 0.5f; // Normalized to 0.0 - 1.0
 
     bool sawEnabled = true;
     bool sqrEnabled = false;
     bool triEnabled = false;
 
-    float lastSample = 0.0f; // 最新の出力値を記憶しておくための変数
+    float lastSample = 0.0f; // Variable to store the latest output value
 
     void updateIncrement();
 };
 
-// ホワイトノイズジェネレーター
+// White noise generator
 class Prop5Noise
 {
 public:
     void prepare(double sampleRate) { juce::ignoreUnused(sampleRate); }
     float processSample() 
     { 
-        // -1.0 〜 1.0 のランダムな値を返す
+        // Returns a random value between -1.0 and 1.0
         return random.nextFloat() * 2.0f - 1.0f; 
     }
 private:

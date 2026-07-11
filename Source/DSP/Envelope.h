@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <JuceHeader.h>
 
 class Prop5Envelope
@@ -16,25 +16,25 @@ public:
   Prop5Envelope();
   ~Prop5Envelope() = default;
 
-  // サンプルレートの初期化
+  // Initialize sample rate
   void prepare(double sampleRate);
 
-  // APVTSからのパラメーターを適用（Time系はミリ秒、Sustainは0.0〜1.0）
+  // Apply parameters from APVTS (Time parameters in milliseconds, Sustain level 0.0 to 1.0)
   void setParameters(float attackMs, float decayMs, float sustainLevel, float releaseMs);
 
-  // ノートオン（鍵盤を押した時）とノートオフ（鍵盤を離した時）のトリガー
+  // Trigger note on (key pressed) and note off (key released)
   void noteOn();
   void noteOff();
 
-  // 1サンプルごとのエンベロープ値（0.0 〜 1.0）を計算して返す
+  // Calculate and return the envelope value (0.0 to 1.0) per sample
   float processSample();
 
-  // エンベロープが完全に終了しているかどうかを判定
+  // Determine if the envelope is completely finished
   bool isActive() const { return state != State::Idle; }
 
   float getOutputValue() const
   {
-    return currentLevel; // 保持している現在のエンベロープ値（0.0〜1.0）を返す
+    return currentLevel; // Return the current envelope value (0.0 to 1.0) held
   }
 
 private:
@@ -52,6 +52,6 @@ private:
 
   float currentLevel = 0.0f;
 
-  // 時間(ms)から1サンプルあたりの変化量を計算する関数
+  // Calculate the change rate per sample from the time (ms)
   void updateRates();
 };

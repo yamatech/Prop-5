@@ -2,7 +2,7 @@
 
 PropLookAndFeel::PropLookAndFeel()
 {
-    // 必要に応じてデフォルト色の変更など
+    // Change default colors as needed
 }
 
 PropLookAndFeel::~PropLookAndFeel()
@@ -15,7 +15,7 @@ void PropLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wid
 {
     auto bounds = juce::Rectangle<int> (x, y, width, height).toFloat();
     
-    // スライダーの直径は幅と高さの小さい方をベースにする
+    // Base the slider diameter on the smaller of width and height
     float diameter = std::min (bounds.getWidth(), bounds.getHeight());
     float radius = diameter * 0.5f - 2.0f;
     float cx = bounds.getCentreX();
@@ -24,13 +24,13 @@ void PropLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wid
     if (radius <= 0.0f)
         return;
 
-    // --- 1. 下地シャドウ（高級感用のうっすら影） ---
+    // --- 1. Shadow underneath (subtle shadow for premium look) ---
     g.setColour (juce::Colours::black.withAlpha (0.4f));
     g.fillEllipse (cx - radius + 1.0f, cy - radius + 2.0f, radius * 2.0f, radius * 2.0f);
 
-    // --- 2. ギザギザのベースを描画（中心から外に向けて黒線を引く） ---
+    // --- 2. Draw jagged base (draw black lines from center outward) ---
     g.setColour (juce::Colour (0xff0d0d0d));
-    int numTeeth = 18; // ギザギザの数
+    int numTeeth = 18; // Number of teeth
     float teethThickness = 2.0f;
     
     for (int i = 0; i < numTeeth; ++i)
@@ -43,33 +43,33 @@ void PropLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wid
         g.drawLine (startX, startY, endX, endY, teethThickness);
     }
 
-    // --- 3. ノブのメイン円体（ギザギザの内側を塗りつぶし、境界を隠す） ---
+    // --- 3. Main circle body of the knob (fill inside the teeth, hide boundaries) ---
     float bodyRadius = radius * 0.85f;
     juce::ColourGradient grad (juce::Colour (0xff242424), cx - bodyRadius, cy - bodyRadius,
                                juce::Colour (0xff0f0f0f), cx + bodyRadius, cy + bodyRadius, true);
     g.setGradientFill (grad);
     g.fillEllipse (cx - bodyRadius, cy - bodyRadius, bodyRadius * 2.0f, bodyRadius * 2.0f);
 
-    // ノブ本体の輪郭線（すこし明るいエッジで立体感を出す）
+    // Contour line of knob body (slightly brighter edge to add 3D depth)
     g.setColour (juce::Colour (0xff3b3b3b));
     g.drawEllipse (cx - bodyRadius, cy - bodyRadius, bodyRadius * 2.0f, bodyRadius * 2.0f, 1.0f);
 
-    // --- 4. 中央のシルバーインサート（アルミ削り出し風プレート） ---
+    // --- 4. Center silver insert (aluminum-brushed style plate) ---
     float silverRadius = radius * 0.45f;
     juce::ColourGradient silverGrad (juce::Colour (0xfffdfdfd), cx - silverRadius * 0.5f, cy - silverRadius * 0.5f,
                                      juce::Colour (0xffaeaeae), cx + silverRadius, cy + silverRadius, true);
     g.setGradientFill (silverGrad);
     g.fillEllipse (cx - silverRadius, cy - silverRadius, silverRadius * 2.0f, silverRadius * 2.0f);
 
-    // シルバー部分の細い輪郭
+    // Thin contour of the silver part
     g.setColour (juce::Colour (0xff5e5e5e));
     g.drawEllipse (cx - silverRadius, cy - silverRadius, silverRadius * 2.0f, silverRadius * 2.0f, 0.7f);
 
-    // --- 5. ホワイトポインター（指示線）の描画 ---
-    // 現在のスライダー値に対応する角度
+    // --- 5. Draw white pointer (indicator line) ---
+    // Angle corresponding to the current slider value
     float angle = startAngle + sliderPos * (endAngle - startAngle);
     
-    // シルバーインサートの端から、ノブ本体の外周付近まで白線を引く
+    // Draw a white line from the edge of the silver insert to near the outer edge of the knob body
     float pointerStart = silverRadius;
     float pointerEnd = bodyRadius;
     
@@ -87,7 +87,7 @@ void PropLookAndFeel::drawToggleButton (juce::Graphics& g, juce::ToggleButton& b
 {
     auto bounds = button.getLocalBounds().toFloat();
     
-    // スイッチ本体の暗いプラスチック背景
+    // Dark plastic background of the switch body
     juce::Colour buttonColor = juce::Colour (0xff1c1c1e);
     if (shouldDrawButtonAsDown)
         buttonColor = juce::Colour (0xff0d0d0e);
@@ -97,11 +97,11 @@ void PropLookAndFeel::drawToggleButton (juce::Graphics& g, juce::ToggleButton& b
     g.setColour (buttonColor);
     g.fillRoundedRectangle (bounds.reduced (1.0f), 2.0f);
     
-    // 立体感のための薄いエッジ
+    // Thin edge for 3D depth
     g.setColour (juce::Colour (0xff303033));
     g.drawRoundedRectangle (bounds.reduced (1.0f), 2.0f, 1.0f);
 
-    // LED窓（ボタンの上部中央付近）
+    // LED window (near top center of the button)
     float ledW = std::clamp (bounds.getWidth() * 0.22f, 7.0f, 16.0f);
     float ledH = std::clamp (bounds.getHeight() * 0.16f, 4.0f, 8.0f);
     
@@ -114,27 +114,27 @@ void PropLookAndFeel::drawToggleButton (juce::Graphics& g, juce::ToggleButton& b
 
     if (button.getToggleState())
     {
-        // LED点灯（明るいネオン赤）
+        // LED ON (bright neon red)
         g.setColour (juce::Colour (0xffff2a1a));
         g.fillRect (ledRect);
         
-        // 周囲へのグロー（光彩）効果
+        // Glow effect to the surroundings
         g.setColour (juce::Colour (0x44ff2a1a));
         g.drawRect (ledRect.expanded (1.5f), 1.0f);
     }
     else
     {
-        // LED消灯（暗いダークレッド）
+        // LED OFF (dark red)
         g.setColour (juce::Colour (0xff4a0d07));
         g.fillRect (ledRect);
     }
 
-    // スイッチ内のテキスト（LED窓の下）
+    // Text inside the switch (below LED window)
     float fontSize = std::clamp (bounds.getHeight() * 0.35f, 9.0f, 12.0f);
     g.setFont (fontSize);
     g.setColour (button.getToggleState() ? juce::Colours::white : juce::Colour (0xffa0a0a5));
     
-    // テキスト領域はLED窓のさらに下
+    // Text area is below the LED window
     auto textRect = bounds.withTrimmedTop (ledRect.getBottom() + 1.0f).reduced (2.0f);
     g.drawFittedText (button.getButtonText(), textRect.toNearestInt(), juce::Justification::centred, 2);
 }

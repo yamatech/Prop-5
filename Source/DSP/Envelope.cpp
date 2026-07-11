@@ -1,4 +1,4 @@
-﻿#include "Envelope.h"
+#include "Envelope.h"
 
 Prop5Envelope::Prop5Envelope() {}
 
@@ -12,7 +12,7 @@ void Prop5Envelope::prepare(double sampleRate)
 
 void Prop5Envelope::setParameters(float attackMs, float decayMs, float sustainLevel, float releaseMs)
 {
-    // 0割りを防ぐため最小値を0.1msとする
+    // Set minimum to 0.1ms to prevent division by zero
     attackTime = juce::jmax(0.1f, attackMs);
     decayTime = juce::jmax(0.1f, decayMs);
     this->sustainLevel = juce::jlimit(0.0f, 1.0f, sustainLevel);
@@ -25,7 +25,7 @@ void Prop5Envelope::updateRates()
 {
     if (currentSampleRate > 0.0)
     {
-        // ミリ秒をサンプル数に変換し、1サンプルあたりの増減量を計算
+        // Convert milliseconds to samples and calculate the increment/decrement per sample
         attackIncrement = 1.0f / (attackTime * 0.001f * currentSampleRate);
         decayDecrement = (1.0f - sustainLevel) / (decayTime * 0.001f * currentSampleRate);
         releaseDecrement = 1.0f / (releaseTime * 0.001f * currentSampleRate); 
@@ -42,7 +42,7 @@ void Prop5Envelope::noteOff()
     if (state != State::Idle)
     {
         state = State::Release;
-        // 現在のレベルから0に向かってリリースするため、レートを再計算
+        // Recalculate rate to release from the current level towards 0
         if (currentSampleRate > 0.0)
             releaseDecrement = currentLevel / (releaseTime * 0.001f * currentSampleRate);
     }
@@ -75,7 +75,7 @@ float Prop5Envelope::processSample()
             break;
 
         case State::Sustain:
-            // パラメーターが動的に変わった場合の追従
+            // Follow up when parameters change dynamically
             if (currentLevel > sustainLevel) 
             {
                 currentLevel -= decayDecrement;

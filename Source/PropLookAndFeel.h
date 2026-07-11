@@ -7,12 +7,12 @@ public:
     PropLookAndFeel();
     ~PropLookAndFeel() override;
 
-    // ロータリーノブのカスタム描画
+    // Custom drawing of rotary slider
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
                            float sliderPos, const float startAngle, const float endAngle,
                            juce::Slider& slider) override;
 
-    // 四角ボタンスイッチのカスタム描画 (ToggleButton用)
+    // Custom drawing of square button switch (for ToggleButton)
     void drawToggleButton (juce::Graphics& g, juce::ToggleButton& button,
                            bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 };

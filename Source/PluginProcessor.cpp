@@ -11,16 +11,16 @@ Prop5Processor::Prop5Processor()
 #endif
       apvts(*this, nullptr, "Prop5State", createParameterLayout())
 {
-    // 5ボイス・ポリフォニック仕様に基づいてシンセボイスを追加
+    // Add synth voices based on the 5-voice polyphonic specification
     for (int i = 0; i < 5; ++i)
     {
         synth.addVoice(new Prop5Voice());
     }
 
-    // シンセサウンドを追加
+    // Add synth sound
     synth.addSound(new Prop5Sound());
 
-    // PropertiesFileの初期化
+    // Initialize PropertiesFile
     juce::PropertiesFile::Options options;
     options.applicationName = "Prop-5";
     options.filenameSuffix = ".xml";
@@ -28,11 +28,11 @@ Prop5Processor::Prop5Processor()
     options.storageFormat = juce::PropertiesFile::storeAsXML;
     properties = std::make_unique<juce::PropertiesFile>(options);
 
-    // ファクトリープリセットでメモリ状態を初期化
+    // Initialize memory state with factory presets
     factoryPresets = getFactoryPresets();
     programStates = factoryPresets;
 
-    // ユーザープリセットのスキャン
+    // Scan user presets
     scanPresets();
 }
 
@@ -80,12 +80,12 @@ void Prop5Processor::setCurrentProgram(int index)
 {
     if (index >= 0 && index < getNumPrograms())
     {
-        // 1. 現在のパラメータ状態をメモリに退避
+        // 1. Save the current parameter state to memory
         saveCurrentStateToMemory();
 
         currentProgram = index;
 
-        // メモリ配列のサイズ拡張が必要であれば拡張
+        // Resize the memory array if expansion is needed
         if (static_cast<size_t>(index) >= programStates.size())
         {
             programStates.resize(index + 1);
@@ -96,7 +96,7 @@ void Prop5Processor::setCurrentProgram(int index)
 
         if (index < factorySize)
         {
-            // ファクトリープリセット
+            // Factory presets
             if (pState.parameters.empty())
             {
                 if (index < factorySize)
@@ -108,7 +108,7 @@ void Prop5Processor::setCurrentProgram(int index)
         }
         else
         {
-            // ユーザープリセット
+            // User presets
             if (pState.parameters.empty())
             {
                 int fileIdx = index - factorySize;
@@ -116,7 +116,7 @@ void Prop5Processor::setCurrentProgram(int index)
                 {
                     loadPresetFromFile (userPresetFiles[fileIdx]);
                     
-                    // ロードした状態をメモリにキャッシュ
+                    // Cache the loaded state in memory
                     pState.name = userPresetFiles[fileIdx].getFileNameWithoutExtension();
                     pState.parameters.clear();
                     for (auto* param : apvts.processor.getParameters())
@@ -186,7 +186,7 @@ void Prop5Processor::resetCurrentProgram()
     int factorySize = static_cast<int>(factoryPresets.size());
     if (currentProgram >= 0 && currentProgram < factorySize)
     {
-        // ファクトリープリセットの初期値でメモリを上書きしてロード
+        // Overwrite memory with default values of factory preset and load
         if (static_cast<size_t>(currentProgram) < factoryPresets.size())
         {
             programStates[currentProgram] = factoryPresets[currentProgram];
@@ -195,12 +195,12 @@ void Prop5Processor::resetCurrentProgram()
     }
     else if (currentProgram >= factorySize)
     {
-        // ユーザープリセットの場合は、ファイルからロードし直す
+        // For user presets, reload from the file
         int fileIdx = currentProgram - factorySize;
         if (fileIdx >= 0 && fileIdx < userPresetFiles.size())
         {
             loadPresetFromFile (userPresetFiles[fileIdx]);
-            // メモリを同期
+            // Synchronize memory
             if (static_cast<size_t>(currentProgram) < programStates.size())
             {
                 auto& pState = programStates[currentProgram];
@@ -267,7 +267,7 @@ void Prop5Processor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     synth.setCurrentPlaybackSampleRate(sampleRate);
     
-    // 各ボイスのサンプリングレート設定などを初期化
+    // Initialize sampling rate settings etc. for each voice
     for (int i = 0; i < synth.getNumVoices(); ++i)
     {
         if (auto* voice = dynamic_cast<Prop5Voice*>(synth.getVoice(i)))
@@ -301,14 +301,14 @@ void Prop5Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // 出力バッファのクリア
+    // Clear output buffer
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // MIDIキーボードの状態を更新し、バッファと同期する
+    // Update MIDI keyboard state and synchronize with buffer
     keyboardState.processNextMidiBuffer (midiMessages, 0, buffer.getNumSamples(), true);
 
-    // MIDIメッセージからピッチベンド、CC、およびプログラムチェンジの変更を検出して処理
+    // Detect and process pitch bend, CC, and program change from MIDI messages
     for (const auto metadata : midiMessages)
     {
         auto msg = metadata.getMessage();
@@ -381,7 +381,7 @@ void Prop5Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
         }
     }
 
-    // 各ボイスに対してAPVTSの最新パラメータを適用
+    // Apply the latest APVTS parameters to each voice
     bool unisonParam = apvts.getRawParameterValue("unison")->load() > 0.5f;
     if (unisonParam != synth.isUnisonMode())
     {
@@ -397,7 +397,7 @@ void Prop5Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
         }
     }
 
-    // 音声生成
+    // Render audio
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
@@ -553,7 +553,7 @@ juce::File Prop5Processor::getCurrentPresetFolder()
 
 juce::File Prop5Processor::getDefaultPresetFolder()
 {
-    // デフォルト: Documents/Prop-5/Presets
+    // Default: Documents/Prop-5/Presets
     juce::File defaultFolder = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory)
                                 .getChildFile ("Prop-5")
                                 .getChildFile ("Presets");
