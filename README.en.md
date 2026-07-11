@@ -13,7 +13,7 @@ Please note that this project partially utilizes AI-assisted coding using Google
 ### Our Philosophy
 
 This software is a non-commercial project developed by an amateur individual developer, and development resources are limited.
-In return, within the scope of the GNU GPLv3 license, we highly welcome users to freely fork, improve, and create/distribute derived versions (including builds for macOS, Linux, etc.).
+In return, within the scope of the GNU GPLv3 license, this is a completely open-source (free) project, and we highly welcome users to freely fork, improve, and create/distribute derived versions (including builds for macOS, Linux, etc.).
 
 We hope to see a world where individual developers can freely create, play, and enjoy their own synthesizers.
 
